@@ -1,3 +1,5 @@
+require 'globalize'
+
 module NoCms
   module Menus
     class Engine < ::Rails::Engine
