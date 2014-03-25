@@ -6,7 +6,7 @@ module NoCms::Menus
     acts_as_nested_set
 
     belongs_to :menu
-    belongs_to :meneable, polymorphic: true
+    belongs_to :menuable, polymorphic: true
 
     validates :name, presence: true
 
