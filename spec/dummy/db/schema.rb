@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325144835) do
+ActiveRecord::Schema.define(version: 20140325163301) do
 
   create_table "no_cms_menus_menu_item_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_item_id"
@@ -31,9 +31,12 @@ ActiveRecord::Schema.define(version: 20140325144835) do
     t.integer  "lft"
     t.integer  "rgt"
     t.integer  "depth"
+    t.integer  "menuable_id"
+    t.string   "menuable_type"
   end
 
   add_index "no_cms_menus_menu_items", ["menu_id"], name: "index_no_cms_menus_menu_items_on_menu_id"
+  add_index "no_cms_menus_menu_items", ["menuable_id", "menuable_type"], name: "index_no_cms_menus_menu_items_on_menuable_id_and_menuable_type"
 
   create_table "no_cms_menus_menu_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_id"
