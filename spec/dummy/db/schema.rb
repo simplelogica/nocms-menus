@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325123418) do
+ActiveRecord::Schema.define(version: 20140325144835) do
+
+  create_table "no_cms_menus_menu_item_translations", force: true do |t|
+    t.integer  "no_cms_menus_menu_item_id"
+    t.string   "locale"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "no_cms_menus_menu_item_translations", ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations"
+
+  create_table "no_cms_menus_menu_items", force: true do |t|
+    t.integer  "menu_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "parent_id"
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "depth"
+  end
+
+  add_index "no_cms_menus_menu_items", ["menu_id"], name: "index_no_cms_menus_menu_items_on_menu_id"
 
   create_table "no_cms_menus_menu_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_id"
