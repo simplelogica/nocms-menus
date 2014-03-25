@@ -9,7 +9,6 @@ class CreateNoCmsMenuItems < ActiveRecord::Migration
     create_table :no_cms_menus_menu_item_translations do |t|
       t.belongs_to :no_cms_menus_menu_item, index: { name: 'no_cms_menu_item_on_translations' }
       t.string :locale
-      t.string :locale
 
       t.string :name
       t.timestamps
