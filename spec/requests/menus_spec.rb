@@ -124,12 +124,41 @@ describe NoCms::Menus do
       subject { page }
 
       it "should mark that item as active" do
-        expect(subject).to have_selector '.menu .menu_item.active', text: parent_menu_item.name
+        expect(subject).to have_selector '.menu .menu_item.active', text: product_menu_item.name
       end
 
       it "should mark only that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', count: 1
       end
+
+    end
+
+    context "when products controller doesn't create @product variable" do
+
+      before do
+        visit product_path(product, change_name: true)
+      end
+
+      subject { page }
+
+      it "should not mark that item as active" do
+        expect(subject).to_not have_selector '.menu .menu_item.active'
+      end
+
+    end
+
+    context "when products controller doesn't create @product variable but set the menu object" do
+
+      before do
+        visit product_path(product, change_name: true, set_menu_object: true)
+      end
+
+      subject { page }
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: product_menu_item.name
+      end
+
 
     end
 
