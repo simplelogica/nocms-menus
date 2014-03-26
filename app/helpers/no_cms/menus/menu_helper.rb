@@ -25,9 +25,18 @@ module NoCms::Menus::MenuHelper
 
   def menu_activation_params
     {
-      object: @page,
+      object: menu_object,
       action: "#{params[:controller]}##{params[:action]}"
     }
+  end
+
+  def menu_object
+    return @menu_object unless @menu_object.nil?
+    @menu_object ||= instance_variable_get("@#{menu_object_name}")
+  end
+
+  def menu_object_name
+    controller.controller_name.singularize
   end
 
 end
