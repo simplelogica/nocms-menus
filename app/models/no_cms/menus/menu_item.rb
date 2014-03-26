@@ -25,5 +25,27 @@ module NoCms::Menus
 
     scope :active_for_external_url, ->(external_url) { where external_url: external_url }
 
+    def active_for?(options = {})
+
+      return active_for_object?(options[:object]) unless options[:object].nil?
+      return active_for_action?(options[:action]) unless options[:action].nil?
+      return active_for_external_url?(options[:url]) unless options[:url].nil?
+
+      false
+
+    end
+
+    def active_for_object? object
+      !object.nil?  && (menuable == object)
+    end
+
+    def active_for_action? action
+      !action.nil?  && (menu_action == action)
+    end
+
+    def active_for_external_url? external_url
+      !external_url.nil?  && (self.external_url == external_url)
+    end
+
   end
 end
