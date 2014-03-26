@@ -12,7 +12,7 @@ module NoCms::Menus::MenuHelper
   def show_submenu menu_item
     item_class = 'menu_item'
 
-    item_class += ' active' if menu_item.active_for? object: @page
+    item_class += ' active' if menu_item.active_for?(object: @page) || menu_item.children.active_for(object: @page).exists?
 
     content_tag(:li, class: item_class) do
       content = menu_item.name
