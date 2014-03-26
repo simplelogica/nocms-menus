@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326091057) do
+ActiveRecord::Schema.define(version: 20140326094623) do
 
   create_table "no_cms_menus_menu_item_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_item_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140326091057) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "external_url"
   end
 
   add_index "no_cms_menus_menu_item_translations", ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations"
