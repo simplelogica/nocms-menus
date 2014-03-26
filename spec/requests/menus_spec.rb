@@ -5,6 +5,7 @@ describe NoCms::Menus do
   let(:menu) { create :no_cms_menus_menu, uid: 'test' }
 
   let(:action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index' }
+  let(:child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', parent: action_menu_item }
 
   let(:parent_page) { create :page }
   let(:parent_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: parent_page }
@@ -18,7 +19,7 @@ describe NoCms::Menus do
     parent_menu_item
     child_page_menu_item
     page_with_no_menu
-    action_menu_item
+    child_action_menu_item
   end
 
   context "when visiting actions" do
@@ -33,6 +34,20 @@ describe NoCms::Menus do
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: action_menu_item.name
+      end
+
+    end
+
+    context "when visiting an action attached to a nested menu item" do
+
+      before do
+        visit pages_path
+      end
+
+      subject { page }
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: child_action_menu_item.name
       end
 
     end
