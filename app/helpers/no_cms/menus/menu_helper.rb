@@ -12,7 +12,7 @@ module NoCms::Menus::MenuHelper
   def show_submenu menu_item
     item_class = 'menu_item'
 
-    item_class += ' active' if menu_item.active_for?(object: @page) || menu_item.children.active_for(object: @page).exists?
+    item_class += ' active' if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
 
     content_tag(:li, class: item_class) do
       content = menu_item.name
@@ -21,6 +21,13 @@ module NoCms::Menus::MenuHelper
         end unless menu_item.children.blank?
       content
     end
+  end
+
+  def menu_activation_params
+    {
+      object: @page,
+      action: "#{params[:controller]}##{params[:action]}"
+    }
   end
 
 end
