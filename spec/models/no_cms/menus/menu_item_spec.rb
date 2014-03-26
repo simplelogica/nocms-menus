@@ -52,6 +52,16 @@ describe NoCms::Menus::Menu do
 
     end
 
+    context "when attached to nothing" do
+
+      subject { action_menu_item }
+
+      it "should not detect nothing" do
+        expect(NoCms::Menus::MenuItem.active_for).to be_blank
+      end
+
+    end
+
   end
 
 end

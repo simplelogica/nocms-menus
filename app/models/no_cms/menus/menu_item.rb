@@ -10,13 +10,13 @@ module NoCms::Menus
 
     validates :name, presence: true
 
-    scope :active_for, ->(options) do
-      object = options[:object]
-      return active_for_object(object) unless options[:object].nil?
-      action = options[:action]
-      return active_for_action(action) unless options[:action].nil?
-      external_url = options[:url]
-      return active_for_external_url(external_url) unless options[:url].nil?
+    scope :active_for, ->(options = {}) do
+
+      return active_for_object(options[:object]) unless options[:object].nil?
+      return active_for_action(options[:action]) unless options[:action].nil?
+      return active_for_external_url(options[:url]) unless options[:url].nil?
+      return none
+
     end
 
     scope :active_for_object, ->(object) { where menuable_type: object.class, menuable_id: object.id }
