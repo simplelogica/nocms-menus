@@ -8,7 +8,10 @@ describe NoCms::Menus::Menu do
 
   context "detecting active menu items" do
 
-    let(:action_menu_item) { create :no_cms_menus_menu_item, menu_action: 'pages#show' }
+    let(:action_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action }
+    let(:menu_action) { 'pages#show' }
+    let(:external_url_menu_item) { create :no_cms_menus_menu_item, external_url: external_url }
+    let(:external_url) { Faker::Internet.domain_name }
     let(:page_menu_item) { create :no_cms_menus_menu_item, menuable: page }
     let(:page) { create :page }
     let(:other_menu_items) { create_list :no_cms_menus_menu_item, 2 }
@@ -16,7 +19,7 @@ describe NoCms::Menus::Menu do
     let(:other_page) { create :page }
 
 
-    before { action_menu_item && page_menu_item && other_menu_items && other_page_menu_item }
+    before { action_menu_item && external_url_menu_item && page_menu_item && other_menu_items && other_page_menu_item }
 
 
     context "when attached to an object" do
@@ -34,7 +37,17 @@ describe NoCms::Menus::Menu do
       subject { action_menu_item }
 
       it "should detect only those attached to that object" do
-        expect(NoCms::Menus::MenuItem.active_for(action: 'pages#show')).to eq [action_menu_item]
+        expect(NoCms::Menus::MenuItem.active_for(action: menu_action)).to eq [action_menu_item]
+      end
+
+    end
+
+    context "when attached to an external url" do
+
+      subject { action_menu_item }
+
+      it "should detect only those attached to that object" do
+        expect(NoCms::Menus::MenuItem.active_for(url: external_url)).to eq [external_url_menu_item]
       end
 
     end
