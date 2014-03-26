@@ -64,7 +64,11 @@ describe NoCms::Menus do
       subject { page }
 
       it "should mark that item as active" do
-        expect(subject).to have_selector '.menu .menu_item.active', text: menu_item.name
+        expect(subject).to have_selector '.menu .menu_item.active', text: parent_menu_item.name
+      end
+
+      it "should mark only that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', count: 1
       end
 
     end
