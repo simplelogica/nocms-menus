@@ -15,11 +15,16 @@ describe NoCms::Menus do
 
   let(:page_with_no_menu) { create :page }
 
+  let(:product) { create :product }
+  let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product  }
+
+
   before do
     parent_menu_item
     child_page_menu_item
     page_with_no_menu
     child_action_menu_item
+    product_menu_item
   end
 
   context "when visiting actions" do
@@ -102,6 +107,28 @@ describe NoCms::Menus do
 
       it "should mark item's parent as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: child_page_menu_item.parent.name
+      end
+
+    end
+
+  end
+
+  context "when visiting products" do
+
+    context "when visiting a product with a menu item" do
+
+      before do
+        visit product_path product
+      end
+
+      subject { page }
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: parent_menu_item.name
+      end
+
+      it "should mark only that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', count: 1
       end
 
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326094623) do
+ActiveRecord::Schema.define(version: 20140326172223) do
 
   create_table "no_cms_menus_menu_item_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_item_id"
@@ -57,6 +57,12 @@ ActiveRecord::Schema.define(version: 20140326094623) do
   end
 
   create_table "pages", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "products", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
