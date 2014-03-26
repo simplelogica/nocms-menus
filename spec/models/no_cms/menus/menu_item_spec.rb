@@ -24,37 +24,41 @@ describe NoCms::Menus::Menu do
 
     context "when attached to an object" do
 
-      subject { page_menu_item }
-
       it "should detect only those attached to that object" do
         expect(NoCms::Menus::MenuItem.active_for(object: page)).to eq [page_menu_item]
+      end
+
+      it "should detect the menu item as active" do
+        expect(page_menu_item).to be_active_for object: page
       end
 
     end
 
     context "when attached to an action" do
 
-      subject { action_menu_item }
-
       it "should detect only those attached to that object" do
         expect(NoCms::Menus::MenuItem.active_for(action: menu_action)).to eq [action_menu_item]
+      end
+
+      it "should detect the menu item as active" do
+        expect(action_menu_item).to be_active_for action: menu_action
       end
 
     end
 
     context "when attached to an external url" do
 
-      subject { action_menu_item }
-
       it "should detect only those attached to that object" do
         expect(NoCms::Menus::MenuItem.active_for(url: external_url)).to eq [external_url_menu_item]
+      end
+
+      it "should detect the menu item as active" do
+        expect(external_url_menu_item).to be_active_for url: external_url
       end
 
     end
 
     context "when attached to nothing" do
-
-      subject { action_menu_item }
 
       it "should not detect nothing" do
         expect(NoCms::Menus::MenuItem.active_for).to be_blank
