@@ -18,6 +18,8 @@ describe NoCms::Menus do
   let(:product) { create :product }
   let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product  }
 
+  let(:external_url_menu_item) { create :no_cms_menus_menu_item, menu: menu, external_url: external_url }
+  let(:external_url) { 'http://www.google.com' }
 
   before do
     parent_menu_item
@@ -25,6 +27,32 @@ describe NoCms::Menus do
     page_with_no_menu
     child_action_menu_item
     product_menu_item
+    external_url_menu_item
+  end
+
+  subject { page }
+
+  context "when rendering links" do
+    before do
+      visit pages_path
+    end
+
+    it "should render link to an action (page index)" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{pages_path}']"
+    end
+
+    it "should render link to an object with custom path (page)" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{parent_page.path}']"
+    end
+
+    it "should render link to an object without custom path (product)" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{product_path(product)}']"
+    end
+
+    it "should render link to an external url" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{external_url}']"
+    end
+
   end
 
   context "when visiting actions" do
@@ -34,8 +62,6 @@ describe NoCms::Menus do
       before do
         visit pages_path
       end
-
-      subject { page }
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: action_menu_item.name
@@ -48,8 +74,6 @@ describe NoCms::Menus do
       before do
         visit pages_path
       end
-
-      subject { page }
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: child_action_menu_item.name
@@ -64,10 +88,8 @@ describe NoCms::Menus do
     context "when page has no menu_item attached" do
 
       before do
-        visit page_path page_with_no_menu
+        visit page_with_no_menu.path
       end
-
-      subject { page }
 
       it "should not mark any item as active" do
         expect(subject).to_not have_selector '.menu .menu_item.active'
@@ -78,10 +100,8 @@ describe NoCms::Menus do
     context "when visiting a page with a menu item" do
 
       before do
-        visit page_path parent_page
+        visit parent_page.path
       end
-
-      subject { page }
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: parent_menu_item.name
@@ -96,10 +116,8 @@ describe NoCms::Menus do
     context "when visiting a page with a nested menu item" do
 
       before do
-        visit page_path child_page
+        visit child_page.path
       end
-
-      subject { page }
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: child_page_menu_item.name
@@ -121,8 +139,6 @@ describe NoCms::Menus do
         visit product_path product
       end
 
-      subject { page }
-
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: product_menu_item.name
       end
@@ -139,8 +155,6 @@ describe NoCms::Menus do
         visit product_path(product, change_name: true)
       end
 
-      subject { page }
-
       it "should not mark that item as active" do
         expect(subject).to_not have_selector '.menu .menu_item.active'
       end
@@ -152,8 +166,6 @@ describe NoCms::Menus do
       before do
         visit product_path(product, change_name: true, set_menu_object: true)
       end
-
-      subject { page }
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: product_menu_item.name
