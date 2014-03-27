@@ -15,7 +15,7 @@ module NoCms::Menus::MenuHelper
     item_class += ' active' if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
 
     content_tag(:li, class: item_class) do
-      content = menu_item.name
+      content = link_to menu_item.name, url_for(menu_item.url_for)
       content += content_tag(:ul) do
           raw menu_item.children.map{|c| show_submenu c }.join
         end unless menu_item.children.blank?
