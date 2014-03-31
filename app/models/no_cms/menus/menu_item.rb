@@ -11,7 +11,7 @@ module NoCms::Menus
 
     accepts_nested_attributes_for :children, allow_destroy: true
 
-    validates :name, presence: true
+    validates :name, :kind, presence: true
 
     scope :active_for, ->(options = {}) do
 
@@ -70,6 +70,10 @@ module NoCms::Menus
 
     def position
       self[:position] || 0
+    end
+
+    def menu_kind
+      NoCms::Menus.menu_kinds[self.kind]
     end
 
     private
