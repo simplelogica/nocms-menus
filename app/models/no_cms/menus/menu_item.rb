@@ -1,5 +1,6 @@
 module NoCms::Menus
   class MenuItem < ActiveRecord::Base
+    include Concerns::TranslationScopes
 
     translates :name, :external_url, :draft
 
