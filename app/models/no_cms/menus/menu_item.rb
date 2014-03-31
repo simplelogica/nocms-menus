@@ -11,7 +11,10 @@ module NoCms::Menus
 
     accepts_nested_attributes_for :children, allow_destroy: true
 
-    validates :name, :kind, presence: true
+    validates :name, :kind, :menu, presence: true
+
+    before_validation :copy_parent_menu
+    after_save :set_default_position
 
     scope :active_for, ->(options = {}) do
 
@@ -32,7 +35,6 @@ module NoCms::Menus
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
 
-    after_save :set_default_position
 
     def active_for?(options = {})
 
@@ -74,6 +76,10 @@ module NoCms::Menus
 
     def menu_kind
       NoCms::Menus.menu_kinds[self.kind]
+    end
+
+    def copy_parent_menu
+      self.menu = parent.menu unless parent.nil?
     end
 
     private
