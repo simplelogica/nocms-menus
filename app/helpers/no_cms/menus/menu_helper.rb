@@ -4,7 +4,7 @@ module NoCms::Menus::MenuHelper
     menu = NoCms::Menus::Menu.find_by(uid: uid)
     return '' if menu.nil?
 
-    options.reverse_merge! menu_class: 'menu', current_class: 'active'
+    options.reverse_merge! menu_class: 'menu'
 
     content_tag(:ul, class: options[:menu_class]) do
       raw menu.menu_items.roots.no_drafts.reorder(position: :asc).map{|r| show_submenu r, options }.join
@@ -12,18 +12,32 @@ module NoCms::Menus::MenuHelper
   end
 
   def show_submenu menu_item, options = {}
-    item_classes = ['menu_item']
 
+    has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
+      !menu_item.children.blank? # This menu item has children
+
+    options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
+
+    item_classes = ['menu_item']
     item_classes << options[:current_class] if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
+    item_classes << options[:with_children_class] if has_children
 
     content_tag(:li, class: item_classes.join(' ')) do
       content = link_to menu_item.name, url_for(menu_item.url_for)
-      content += content_tag(:ul) do
-          raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
-        end unless (options[:depth] && (menu_item.depth >= options[:depth]-1)) ||
-          menu_item.children.blank?
+      content += show_children_submenu(menu_item, options) if has_children
       content
     end
+  end
+
+  def show_children_submenu menu_item, options = {}
+    has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
+      !menu_item.children.blank? # This menu item has children
+
+    options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
+
+    content_tag(:ul, id: options[:submenu_id], class: options[:submenu_class]) do
+      raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
+    end if has_children
   end
 
   def menu_activation_params
