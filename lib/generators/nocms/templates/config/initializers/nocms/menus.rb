@@ -8,6 +8,8 @@ NoCms::Menus.configure do |config|
   # E.g: config.menu_kinds = {
   #   'page' => {
   #     object_class: Page,
+  #     object_name_method: :title # This is used for displaying the name
+  #       # of the item in nocms-admin-menus
   #   },
   #   'agenda' => {
   #     action: 'events#index'
