@@ -58,12 +58,12 @@ module NoCms::Menus
 
     def url_for
       case
-        when !menuable.nil?
+        when !menu_kind[:object_class].nil?
           menuable.respond_to?(:path) ? menuable.path : menuable
-        when !menu_action.blank?
+        when !menu_kind[:action].nil?
           controller, action = menu_action.split('#')
           { controller: controller, action: action }
-        when !external_url.blank?
+        else
           external_url
       end
     end
