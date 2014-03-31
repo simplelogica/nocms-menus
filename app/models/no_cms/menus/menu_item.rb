@@ -11,7 +11,7 @@ module NoCms::Menus
 
     accepts_nested_attributes_for :children, allow_destroy: true
 
-    validates :name, presence: true
+    validates :name, :kind, presence: true
 
     scope :active_for, ->(options = {}) do
 
@@ -58,18 +58,22 @@ module NoCms::Menus
 
     def url_for
       case
-        when !menuable.nil?
+        when !menu_kind[:object_class].nil?
           menuable.respond_to?(:path) ? menuable.path : menuable
-        when !menu_action.blank?
+        when !menu_kind[:action].nil?
           controller, action = menu_action.split('#')
           { controller: controller, action: action }
-        when !external_url.blank?
+        else
           external_url
       end
     end
 
     def position
       self[:position] || 0
+    end
+
+    def menu_kind
+      NoCms::Menus.menu_kinds[self.kind]
     end
 
     private
