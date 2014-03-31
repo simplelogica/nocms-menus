@@ -6,7 +6,7 @@ module NoCms::Menus
 
     acts_as_nested_set
 
-    belongs_to :menu
+    belongs_to :menu, inverse_of: :menu_items
     belongs_to :menuable, polymorphic: true
 
     accepts_nested_attributes_for :children, allow_destroy: true
