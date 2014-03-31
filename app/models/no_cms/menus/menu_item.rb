@@ -27,6 +27,10 @@ module NoCms::Menus
 
     scope :active_for_external_url, ->(external_url) { where external_url: external_url }
 
+
+    scope :drafts, ->() { where_with_locale(draft: true) }
+    scope :no_drafts, ->() { where_with_locale(draft: false) }
+
     after_save :set_default_position
 
     def active_for?(options = {})
