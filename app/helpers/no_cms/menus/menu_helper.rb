@@ -42,4 +42,15 @@ module NoCms::Menus::MenuHelper
     controller.controller_name.singularize
   end
 
+  def current_menu_items_in_menu menu
+    menu = NoCms::Menus::Menu.find_by(uid: menu) if menu.is_a? String
+    return [] if menu.nil?
+    menu.menu_items.active_for menu_activation_params
+  end
+
+  def current_roots_in_menu menu
+    menu = NoCms::Menus::Menu.find_by(uid: menu) if menu.is_a? String
+    return [] if menu.nil?
+    current_menu_items_in_menu(menu).map(&:root)
+  end
 end
