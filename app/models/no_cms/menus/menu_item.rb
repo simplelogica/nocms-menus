@@ -27,6 +27,8 @@ module NoCms::Menus
 
     scope :active_for_external_url, ->(external_url) { where external_url: external_url }
 
+    after_save :set_default_position
+
     def active_for?(options = {})
 
       return active_for_object?(options[:object]) unless options[:object].nil?
@@ -60,6 +62,17 @@ module NoCms::Menus
           external_url
       end
     end
+
+    def position
+      self[:position] || 0
+    end
+
+    private
+
+    def set_default_position
+      self.update_attribute :position, ((menu.menu_items.pluck(:position).compact.max || 0) + 1) if self[:position].blank?
+    end
+
 
   end
 end

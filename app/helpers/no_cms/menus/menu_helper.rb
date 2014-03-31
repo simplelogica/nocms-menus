@@ -5,7 +5,7 @@ module NoCms::Menus::MenuHelper
     return '' if menu.nil?
 
     content_tag(:ul, class: 'menu') do
-      raw menu.menu_items.roots.map{|r| show_submenu r }.join
+      raw menu.menu_items.roots.reorder(position: :asc).map{|r| show_submenu r }.join
     end
   end
 
@@ -17,7 +17,7 @@ module NoCms::Menus::MenuHelper
     content_tag(:li, class: item_class) do
       content = link_to menu_item.name, url_for(menu_item.url_for)
       content += content_tag(:ul) do
-          raw menu_item.children.map{|c| show_submenu c }.join
+          raw menu_item.children.reorder(position: :asc).map{|c| show_submenu c }.join
         end unless menu_item.children.blank?
       content
     end
