@@ -8,6 +8,8 @@ module NoCms::Menus
     belongs_to :menu
     belongs_to :menuable, polymorphic: true
 
+    accepts_nested_attributes_for :children, allow_destroy: true
+
     validates :name, presence: true
 
     scope :active_for, ->(options = {}) do
