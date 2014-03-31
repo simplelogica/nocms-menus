@@ -1,7 +1,7 @@
 module NoCms::Menus
   class MenuItem < ActiveRecord::Base
 
-    translates :name, :external_url
+    translates :name, :external_url, :draft
 
     acts_as_nested_set
 
@@ -26,6 +26,10 @@ module NoCms::Menus
     scope :active_for_action, ->(action) { where menu_action: action }
 
     scope :active_for_external_url, ->(external_url) { where external_url: external_url }
+
+
+    scope :drafts, ->() { where_with_locale(draft: true) }
+    scope :no_drafts, ->() { where_with_locale(draft: false) }
 
     after_save :set_default_position
 
