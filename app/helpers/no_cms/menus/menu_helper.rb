@@ -4,17 +4,19 @@ module NoCms::Menus::MenuHelper
     menu = NoCms::Menus::Menu.find_by(uid: uid)
     return '' if menu.nil?
 
-    content_tag(:ul, class: 'menu') do
+    options.reverse_merge! menu_class: 'menu', current_class: 'active'
+
+    content_tag(:ul, class: options[:menu_class]) do
       raw menu.menu_items.roots.no_drafts.reorder(position: :asc).map{|r| show_submenu r, options }.join
     end
   end
 
   def show_submenu menu_item, options = {}
-    item_class = 'menu_item'
+    item_classes = ['menu_item']
 
-    item_class += ' active' if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
+    item_classes << options[:current_class] if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
 
-    content_tag(:li, class: item_class) do
+    content_tag(:li, class: item_classes.join(' ')) do
       content = link_to menu_item.name, url_for(menu_item.url_for)
       content += content_tag(:ul) do
           raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
