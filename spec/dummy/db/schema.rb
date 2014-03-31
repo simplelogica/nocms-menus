@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20140331140645) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "external_url"
-    t.boolean  "draft"
+    t.boolean  "draft",                     default: false
   end
 
   add_index "no_cms_menus_menu_item_translations", ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations"
