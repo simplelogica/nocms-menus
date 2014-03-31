@@ -1,7 +1,7 @@
 module NoCms::Menus
   class MenuItem < ActiveRecord::Base
 
-    translates :name, :external_url
+    translates :name, :external_url, :draft
 
     acts_as_nested_set
 
