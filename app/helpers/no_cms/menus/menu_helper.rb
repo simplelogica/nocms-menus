@@ -65,6 +65,12 @@ module NoCms::Menus::MenuHelper
   def current_roots_in_menu menu
     menu = NoCms::Menus::Menu.find_by(uid: menu) if menu.is_a? String
     return [] if menu.nil?
-    current_menu_items_in_menu(menu).map(&:root)
+    current_menu_items_in_menu_at_level menu, 1
+  end
+
+  def current_menu_items_in_menu_at_level menu, level
+    menu = NoCms::Menus::Menu.find_by(uid: menu) if menu.is_a? String
+    return [] if menu.nil?
+    current_menu_items_in_menu(menu).map{|c| c.self_and_ancestors.where(depth: level-1) }.flatten
   end
 end
