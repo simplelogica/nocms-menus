@@ -19,7 +19,7 @@ module NoCms::Menus::MenuHelper
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
     item_classes = ['menu_item']
-    item_classes << options[:current_class] if menu_item.active_for?(menu_activation_params) || menu_item.children.active_for(menu_activation_params).exists?
+    item_classes << options[:current_class] if menu_item.active_for?(menu_activation_params) || menu_item.descendants.active_for(menu_activation_params).exists?
     item_classes << options[:with_children_class] if has_children
 
     content_tag(:li, class: item_classes.join(' ')) do
