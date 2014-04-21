@@ -14,7 +14,7 @@ module NoCms::Menus::MenuHelper
   def show_submenu menu_item, options = {}
 
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
-      !menu_item.children.blank? # This menu item has children
+      menu_item.children.no_drafts.exists? # This menu item has children
 
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
@@ -33,7 +33,7 @@ module NoCms::Menus::MenuHelper
     options = options.dup
 
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
-      !menu_item.children.blank? # This menu item has children
+      menu_item.children.no_drafts.exists? # This menu item has children
 
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
