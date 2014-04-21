@@ -36,7 +36,11 @@ module NoCms::Menus::MenuHelper
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
     submenu_id = options.delete :submenu_id
-    submenu_class = options.delete :submenu_class
+    if options[:submenu_class].is_a? Array
+      submenu_class = options[:submenu_class].shift
+    else
+      submenu_class = options.delete :submenu_class
+    end
 
     content_tag(:ul, id: submenu_id, class: submenu_class) do
       raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
