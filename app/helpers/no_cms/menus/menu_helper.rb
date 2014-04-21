@@ -30,6 +30,8 @@ module NoCms::Menus::MenuHelper
   end
 
   def show_children_submenu menu_item, options = {}
+    options = options.dup
+
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
       !menu_item.children.blank? # This menu item has children
 
@@ -37,6 +39,7 @@ module NoCms::Menus::MenuHelper
 
     submenu_id = options.delete :submenu_id
     if options[:submenu_class].is_a? Array
+      options[:submenu_class] = options[:submenu_class].dup
       submenu_class = options[:submenu_class].shift
     else
       submenu_class = options.delete :submenu_class
