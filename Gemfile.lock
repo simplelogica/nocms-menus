@@ -6,6 +6,12 @@ PATH
       globalize (~> 4.0, >= 4.0.0)
       rails (~> 4.0, >= 4.0.4)
 
+PATH
+  remote: spec/dummy/vendor/test_engine
+  specs:
+    test_engine (0.0.1)
+      rails (~> 4.0.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -133,3 +139,4 @@ DEPENDENCIES
   nocms-menus!
   rspec-rails (~> 3.0.0.beta)
   sqlite3
+  test_engine!

@@ -15,6 +15,7 @@ gemspec
 
 group :development, :test do
   gem 'faker'
+  gem 'test_engine', path: 'spec/dummy/vendor/test_engine'
 end
 
 group :test do
