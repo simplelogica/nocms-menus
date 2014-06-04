@@ -31,6 +31,10 @@ NoCms::Menus.configure do |config|
       route_set: 'test_engine',
       action: 'test_engine/tests#index'
     },
+    'recent_tests' => {
+      route_set: 'test_engine',
+      action: 'test_engine/tests#recent'
+    },
     'fixed_url' => {
       external_url:  true
     }

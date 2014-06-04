@@ -8,7 +8,7 @@ describe NoCms::Menus do
   let(:child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', parent: action_menu_item, kind: 'pages' }
 
   let(:engine_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#index', kind: 'tests' }
-  let(:engine_child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#index', parent: engine_action_menu_item, kind: 'tests' }
+  let(:engine_child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#recent', parent: engine_action_menu_item, kind: 'recent_tests' }
 
   let(:parent_page) { create :page }
   let(:parent_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: parent_page, kind: 'page' }
@@ -109,7 +109,7 @@ describe NoCms::Menus do
     context "when attached to a nested menu item" do
 
       before do
-        visit pages_path
+        visit test_engine.recent_tests_path
       end
 
       it "should mark that item as active" do
