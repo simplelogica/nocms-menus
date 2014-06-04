@@ -17,4 +17,26 @@ NoCms::Menus.configure do |config|
   #   }
   # }
 
+  config.menu_kinds = {
+    'page' => {
+      object_class: Page,
+    },
+    'product' => {
+      object_class: Product,
+    },
+    'pages' => {
+      action: 'pages#index'
+    },
+    'tests' => {
+      route_set: 'test_engine',
+      action: 'test_engine/tests#index'
+    },
+    'recent_tests' => {
+      route_set: 'test_engine',
+      action: 'test_engine/tests#recent'
+    },
+    'fixed_url' => {
+      external_url:  true
+    }
+  }
 end

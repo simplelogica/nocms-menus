@@ -64,10 +64,15 @@ module NoCms::Menus
           menuable.respond_to?(:path) ? menuable.path : menuable
         when !menu_kind[:action].nil?
           controller, action = menu_action.split('#')
-          { controller: controller, action: action }
+          # When we are inside an engine we need to prepend '/' to the controller, or else it would search the controller in the current engine
+          { controller: "/#{controller}", action: action }
         else
           external_url
       end
+    end
+
+    def route_set
+      menu_kind[:route_set]
     end
 
     def position

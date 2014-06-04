@@ -4,21 +4,24 @@ describe NoCms::Menus do
 
   let(:menu) { create :no_cms_menus_menu, uid: 'test' }
 
-  let(:action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index' }
-  let(:child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', parent: action_menu_item }
+  let(:action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', kind: 'pages' }
+  let(:child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', parent: action_menu_item, kind: 'pages' }
+
+  let(:engine_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#index', kind: 'tests' }
+  let(:engine_child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#recent', parent: engine_action_menu_item, kind: 'recent_tests' }
 
   let(:parent_page) { create :page }
-  let(:parent_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: parent_page }
+  let(:parent_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: parent_page, kind: 'page' }
 
   let(:child_page) { create :page }
-  let(:child_page_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: child_page, parent: parent_menu_item }
+  let(:child_page_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: child_page, parent: parent_menu_item, kind: 'page' }
 
   let(:page_with_no_menu) { create :page }
 
   let(:product) { create :product }
-  let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product  }
+  let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product, kind: 'product'  }
 
-  let(:external_url_menu_item) { create :no_cms_menus_menu_item, menu: menu, external_url: external_url }
+  let(:external_url_menu_item) { create :no_cms_menus_menu_item, menu: menu, external_url: external_url, kind: 'fixed_url' }
   let(:external_url) { 'http://www.google.com' }
 
   before do
@@ -26,6 +29,7 @@ describe NoCms::Menus do
     child_page_menu_item
     page_with_no_menu
     child_action_menu_item
+    engine_child_action_menu_item
     product_menu_item
     external_url_menu_item
   end
@@ -39,6 +43,10 @@ describe NoCms::Menus do
 
     it "should render link to an action (page index)" do
       expect(subject).to have_selector ".menu .menu_item a[href='#{pages_path}']"
+    end
+
+    it "should render link to an action in other engine (tests index)" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{test_engine.tests_path}']"
     end
 
     it "should render link to an object with custom path (page)" do
@@ -77,6 +85,35 @@ describe NoCms::Menus do
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: child_action_menu_item.name
+      end
+
+    end
+
+  end
+
+
+  context "when visiting actions in another engine" do
+
+    context "when attached to a menu item" do
+
+      before do
+        visit test_engine.tests_path
+      end
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: engine_action_menu_item.name
+      end
+
+    end
+
+    context "when attached to a nested menu item" do
+
+      before do
+        visit test_engine.recent_tests_path
+      end
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: engine_child_action_menu_item.name
       end
 
     end
