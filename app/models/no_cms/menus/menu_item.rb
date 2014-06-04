@@ -70,6 +70,10 @@ module NoCms::Menus
       end
     end
 
+    def route_set
+      menu_kind[:route_set]
+    end
+
     def position
       self[:position] || 0
     end

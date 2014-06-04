@@ -23,7 +23,13 @@ module NoCms::Menus::MenuHelper
     item_classes << options[:with_children_class] if has_children
 
     content_tag(:li, class: item_classes.join(' ')) do
-      content = link_to menu_item.name, url_for(menu_item.url_for)
+      # If this menu item points to a route in other engine we need that engines route set
+      menu_item_route_set = menu_item.route_set.nil? ? main_app : send(menu_item.route_set)
+      # Now we get the url_for info and if it's a hash then add the :only_path option
+      url_info =  menu_item.url_for
+      url_info[:only_path] = true if url_info.is_a? Hash
+      # And finally get the link
+      content = link_to menu_item.name, menu_item_route_set.url_for(url_info)
       content += show_children_submenu(menu_item, options) if has_children
       content
     end

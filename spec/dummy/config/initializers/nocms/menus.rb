@@ -28,7 +28,8 @@ NoCms::Menus.configure do |config|
       action: 'pages#index'
     },
     'tests' => {
-      action: 'tests#index'
+      route_set: 'test_engine',
+      action: 'test_engine/tests#index'
     },
     'fixed_url' => {
       external_url:  true
