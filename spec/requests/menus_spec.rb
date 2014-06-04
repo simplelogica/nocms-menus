@@ -7,8 +7,8 @@ describe NoCms::Menus do
   let(:action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', kind: 'pages' }
   let(:child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', parent: action_menu_item, kind: 'pages' }
 
-  let(:engine_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'tests#index', kind: 'tests' }
-  let(:engine_child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'tests#index', parent: engine_action_menu_item, kind: 'tests' }
+  let(:engine_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#index', kind: 'tests' }
+  let(:engine_child_action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'test_engine/tests#index', parent: engine_action_menu_item, kind: 'tests' }
 
   let(:parent_page) { create :page }
   let(:parent_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: parent_page, kind: 'page' }
@@ -29,6 +29,7 @@ describe NoCms::Menus do
     child_page_menu_item
     page_with_no_menu
     child_action_menu_item
+    engine_child_action_menu_item
     product_menu_item
     external_url_menu_item
   end
@@ -42,6 +43,10 @@ describe NoCms::Menus do
 
     it "should render link to an action (page index)" do
       expect(subject).to have_selector ".menu .menu_item a[href='#{pages_path}']"
+    end
+
+    it "should render link to an action in other engine (tests index)" do
+      expect(subject).to have_selector ".menu .menu_item a[href='#{test_engine.tests_path}']"
     end
 
     it "should render link to an object with custom path (page)" do
@@ -80,6 +85,35 @@ describe NoCms::Menus do
 
       it "should mark that item as active" do
         expect(subject).to have_selector '.menu .menu_item.active', text: child_action_menu_item.name
+      end
+
+    end
+
+  end
+
+
+  context "when visiting actions in another engine" do
+
+    context "when attached to a menu item" do
+
+      before do
+        visit test_engine.tests_path
+      end
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: engine_action_menu_item.name
+      end
+
+    end
+
+    context "when attached to a nested menu item" do
+
+      before do
+        visit pages_path
+      end
+
+      it "should mark that item as active" do
+        expect(subject).to have_selector '.menu .menu_item.active', text: engine_child_action_menu_item.name
       end
 
     end

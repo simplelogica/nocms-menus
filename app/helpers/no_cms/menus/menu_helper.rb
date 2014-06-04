@@ -28,8 +28,13 @@ module NoCms::Menus::MenuHelper
       # Now we get the url_for info and if it's a hash then add the :only_path option
       url_info =  menu_item.url_for
       url_info[:only_path] = true if url_info.is_a? Hash
+      url_info = { object: url_info, only_path: true } if
+
+      # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
+      path = url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
+
       # And finally get the link
-      content = link_to menu_item.name, menu_item_route_set.url_for(url_info)
+      content = link_to menu_item.name, path
       content += show_children_submenu(menu_item, options) if has_children
       content
     end
