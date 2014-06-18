@@ -17,9 +17,10 @@ module NoCms::Menus
     after_save :set_default_position
 
     scope :active_for, ->(options = {}) do
-
-      return active_for_object(options[:object]) unless options[:object].nil?
-      return active_for_action(options[:action]) unless options[:action].nil?
+      # Now we search the active menu item. First we search for the any active for the current object, then the action and then an static url
+      # If there's no param (object, action or url) or an active item for the param then we search the next one
+      return active_for_object(options[:object]) unless options[:object].nil? || !active_for_object(options[:object]).exists?
+      return active_for_action(options[:action]) unless options[:action].nil? || !active_for_action(options[:action]).exists?
       return active_for_external_url(options[:url]) unless options[:url].nil?
       return none
 
