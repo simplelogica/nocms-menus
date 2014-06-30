@@ -6,20 +6,27 @@ module NoCms::Menus::MenuHelper
 
     options.reverse_merge! menu_class: 'menu'
 
+    options[:active_menu_items] = menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+    options[:leaves_menu_items] ||= menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
+
     content_tag(:ul, class: options[:menu_class]) do
-      raw menu.menu_items.roots.no_drafts.reorder(position: :asc).map{|r| show_submenu r, options }.join
-    end
+      raw menu.menu_items.roots.no_drafts.includes(:translations).reorder(position: :asc).map{|r| show_submenu r, options }.join
+    end.to_s
+
   end
 
   def show_submenu menu_item, options = {}
 
+    options[:leaves_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
+    options[:active_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
-      menu_item.children.no_drafts.exists? # This menu item has children
+      !options[:leaves_menu_items].include?(menu_item.id) # This menu item is not a leaf
 
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
     item_classes = ['menu_item']
-    item_classes << options[:current_class] if menu_item.active_for?(menu_activation_params) || menu_item.descendants.active_for(menu_activation_params).exists?
+    item_classes << options[:current_class] if options[:active_menu_items].include?(menu_item.id)
     item_classes << options[:with_children_class] if has_children
 
     content_tag(:li, class: item_classes.join(' ')) do
@@ -43,8 +50,11 @@ module NoCms::Menus::MenuHelper
   def show_children_submenu menu_item, options = {}
     options = options.dup
 
+    options[:leaves_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
+    options[:active_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
-      menu_item.children.no_drafts.exists? # This menu item has children
+      !options[:leaves_menu_items].include?(menu_item.id) # This menu item is not a leaf
 
     options.reverse_merge! current_class: 'active', with_children_class: 'has-children'
 
@@ -57,7 +67,7 @@ module NoCms::Menus::MenuHelper
     end
 
     content_tag(:ul, id: submenu_id, class: submenu_class) do
-      raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
+      raw menu_item.children.no_drafts.includes(:translations).reorder(position: :asc).map{|c| show_submenu c, options }.join
     end if has_children
   end
 
