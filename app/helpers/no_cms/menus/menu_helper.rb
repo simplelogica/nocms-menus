@@ -1,24 +1,56 @@
 module NoCms::Menus::MenuHelper
 
+  def active_menu_item_ids menu
+    menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+  end
+
+  def leaf_menu_item_ids menu
+    menu.menu_items.leaves.no_drafts.pluck(:id)
+  end
+
+  def conditional_cache_menu menu, cache_options = {}
+    cache_options = cache_options.dup
+    cache_options.reverse_merge! initial_cache_key: 'menu-', cache_enabled: NoCms::Menus.cache_enabled
+
+    if cache_options[:cache_enabled]
+      Rails.cache.fetch cache_key_for_menu(menu, cache_options) do
+        yield
+      end
+    else
+      yield
+    end
+  end
+
+  def cache_key_for_menu menu, options = {}
+    options[:timestamp] ||= [menu.updated_at, menu.menu_items.maximum(:updated_at)].max.to_i
+    options[:active_menu_items] ||= active_menu_item_ids menu
+
+    "menus/#{options[:initial_cache_key]}-#{menu.uid}-" + # We use the menu uid
+    "#{options[:timestamp]}" + # And the last updated date from the last updated item (or the menu itself)
+    "-#{options[:active_menu_items].join("_")}" # And which menu items should be selected
+  end
+
   def show_menu uid, options = {}
     menu = NoCms::Menus::Menu.find_by(uid: uid)
     return '' if menu.nil?
 
     options.reverse_merge! menu_class: 'menu'
 
-    options[:active_menu_items] = menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
-    options[:leaves_menu_items] ||= menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
+    options[:active_menu_items] ||= active_menu_item_ids menu
+    options[:leaves_menu_items] ||= leaf_menu_item_ids menu
 
-    content_tag(:ul, class: options[:menu_class]) do
-      raw menu.menu_items.roots.no_drafts.includes(:translations).reorder(position: :asc).map{|r| show_submenu r, options }.join
-    end.to_s
+    conditional_cache_menu menu, options do
+      content_tag(:ul, class: options[:menu_class]) do
+        raw menu.menu_items.roots.no_drafts.includes(:translations).reorder(position: :asc).map{|r| show_submenu r, options }.join
+      end.to_s
+    end
 
   end
 
   def show_submenu menu_item, options = {}
 
-    options[:leaves_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
-    options[:active_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+    options[:active_menu_items] ||= active_menu_item_ids menu_item.menu
+    options[:leaves_menu_items] ||= leaf_menu_item_ids menu_item.menu
 
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
       !options[:leaves_menu_items].include?(menu_item.id) # This menu item is not a leaf
@@ -50,8 +82,8 @@ module NoCms::Menus::MenuHelper
   def show_children_submenu menu_item, options = {}
     options = options.dup
 
-    options[:leaves_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).leaves.pluck(:id)
-    options[:active_menu_items] ||= menu_item.menu.menu_items.active_for(menu_activation_params).map{|i| i.self_and_ancestors.pluck(:id)}.flatten.uniq
+    options[:leaves_menu_items] ||= leaf_menu_item_ids menu_item.menu
+    options[:active_menu_items] ||= active_menu_item_ids menu_item.menu
 
     has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
       !options[:leaves_menu_items].include?(menu_item.id) # This menu item is not a leaf
