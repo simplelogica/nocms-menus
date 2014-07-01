@@ -50,7 +50,7 @@ describe NoCms::Menus do
     end
 
     it "should render link to an object with custom path (page)" do
-      expect(subject).to have_selector ".menu .menu_item a[href='#{parent_page.path}']"
+      expect(subject).to have_selector ".menu .menu_item.has-children a[href='#{parent_page.path}']"
     end
 
     it "should render link to an object without custom path (product)" do
@@ -61,7 +61,21 @@ describe NoCms::Menus do
       expect(subject).to have_selector ".menu .menu_item a[href='#{external_url}']"
     end
 
+    context "when drafting some menu item" do
+
+      before do
+        child_page_menu_item.update_attributes draft: true;
+        visit pages_path
+      end
+
+      it "should not render its parent as having children" do
+        expect(subject).to have_selector ".menu .menu_item a[href='#{parent_page.path}']"
+        expect(subject).to_not have_selector ".menu .menu_item.has-children a[href='#{parent_page.path}']"
+      end
+
+    end
   end
+
 
   context "when visiting actions" do
 

@@ -1,5 +1,10 @@
 NoCms::Menus.configure do |config|
 
+  # Enable cache in the standard menu helpers globally
+  # Note that you can override this setting by sending the option :cache true or false when calling the menu helpers
+  # e.g: show_menu 'menu_name', depth: 2, menu_class: 'nav', cache: true
+  # config.cache_enabled = false
+
   # In this section we configure which options will be available in the menus selector.
   # Menu kinds may contain:
   #   - A class in object_class option. Then the admin would show all the objects of that class.

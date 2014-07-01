@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140331140645) do
+ActiveRecord::Schema.define(version: 20140701133352) do
 
   create_table "no_cms_menus_menu_item_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_item_id"
@@ -21,8 +21,10 @@ ActiveRecord::Schema.define(version: 20140331140645) do
     t.datetime "updated_at"
     t.string   "external_url"
     t.boolean  "draft",                     default: false
+    t.boolean  "leaf_with_draft",           default: false
   end
 
+  add_index "no_cms_menus_menu_item_translations", ["leaf_with_draft"], name: "index_no_cms_menus_menu_item_translations_on_leaf_with_draft"
   add_index "no_cms_menus_menu_item_translations", ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations"
 
   create_table "no_cms_menus_menu_items", force: true do |t|
@@ -38,6 +40,7 @@ ActiveRecord::Schema.define(version: 20140331140645) do
     t.string   "menu_action"
     t.integer  "position"
     t.string   "kind"
+    t.string   "engine"
   end
 
   add_index "no_cms_menus_menu_items", ["menu_id"], name: "index_no_cms_menus_menu_items_on_menu_id"
