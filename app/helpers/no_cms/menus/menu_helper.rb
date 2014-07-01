@@ -5,7 +5,7 @@ module NoCms::Menus::MenuHelper
   end
 
   def leaf_menu_item_ids menu
-    menu.menu_items.leaves.no_drafts.pluck(:id)
+    menu.menu_items.leaves_with_draft.no_drafts.pluck(:id)
   end
 
   def conditional_cache_menu menu, cache_options = {}
