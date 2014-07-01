@@ -110,14 +110,28 @@ describe NoCms::Menus::Menu do
     end
 
     context "when considering a root with some draft children" do
-      it "should be a leaf" do
+      it "should not be a leaf" do
         expect(root_menu_item_2.reload).to_not be_leaf_with_draft
+      end
+
+      context "when the other child is also drafted" do
+        before { child_menu_item_2.update_attributes draft: true }
+        it "should be a leaf" do
+          expect(root_menu_item_2.reload).to be_leaf_with_draft
+        end
       end
     end
 
     context "when considering a root with only draft children" do
       it "should be a leaf" do
         expect(root_menu_item_3.reload).to be_leaf_with_draft
+      end
+
+      context "when the children are undrafted" do
+        before { only_draft_child_menu_item_3.update_attributes draft: false }
+        it "should not be a leaf" do
+          expect(root_menu_item_3.reload).to_not be_leaf_with_draft
+        end
       end
     end
   end
