@@ -14,6 +14,7 @@ module NoCms::Menus
     validates :name, :kind, :menu, presence: true
 
     before_validation :copy_parent_menu
+    after_save :set_leaf_with_draft
     after_save :set_default_position
 
     scope :active_for, ->(options = {}) do
@@ -32,10 +33,8 @@ module NoCms::Menus
 
     scope :active_for_external_url, ->(external_url) { where external_url: external_url }
 
-
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
-
 
     def active_for?(options = {})
 
@@ -88,12 +87,16 @@ module NoCms::Menus
       self.menu = parent.menu unless parent.nil?
     end
 
+    def set_leaf_with_draft
+      self.update_column :leaf_with_draft, !descendants.no_drafts.exists?
+      self.parent.set_leaf_with_draft unless root?
+    end
+
     private
 
     def set_default_position
       self.update_attribute :position, ((menu.menu_items.pluck(:position).compact.max || 0) + 1) if self[:position].blank?
     end
-
 
   end
 end

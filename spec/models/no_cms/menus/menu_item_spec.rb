@@ -68,4 +68,59 @@ describe NoCms::Menus::Menu do
 
   end
 
+  context "detecting leaf menu items" do
+    let(:menu_action) { 'pages#show' }
+    let(:menu) { create :no_cms_menus_menu }
+    let(:root_leaf_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu }
+    let(:root_menu_item_1) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu }
+    let(:child_menu_item_1) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu, parent: root_menu_item_1 }
+    let(:root_menu_item_2) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu }
+    let(:child_menu_item_2) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu, parent: root_menu_item_2 }
+    let(:draft_child_menu_item_2) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu, parent: root_menu_item_2, draft: true }
+    let(:root_menu_item_3) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu }
+    let(:only_draft_child_menu_item_3) { create :no_cms_menus_menu_item, menu_action: menu_action, menu: menu, parent: root_menu_item_3, draft: true }
+
+    before do
+      root_leaf_menu_item
+      root_menu_item_1
+      child_menu_item_1
+      root_menu_item_2
+      child_menu_item_2
+      draft_child_menu_item_2
+      root_menu_item_3
+      only_draft_child_menu_item_3
+    end
+
+    context "when considering a root without children" do
+      it "should be a leaf" do
+        expect(root_leaf_menu_item.reload).to be_leaf_with_draft
+      end
+    end
+
+    context "when considering a root with children" do
+      it "should not be a leaf" do
+        expect(root_menu_item_1.reload).to_not be_leaf_with_draft
+      end
+    end
+
+    context "when considering a child without children" do
+      it "should be a leaf" do
+        expect(child_menu_item_1.reload).to be_leaf_with_draft
+      end
+    end
+
+    context "when considering a root with some draft children" do
+      it "should be a leaf" do
+        expect(root_menu_item_2.reload).to_not be_leaf_with_draft
+      end
+    end
+
+    context "when considering a root with only draft children" do
+      it "should be a leaf" do
+        expect(root_menu_item_3.reload).to be_leaf_with_draft
+      end
+    end
+  end
+
+
 end
