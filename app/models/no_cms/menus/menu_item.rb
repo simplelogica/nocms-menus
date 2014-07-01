@@ -88,8 +88,9 @@ module NoCms::Menus
     end
 
     def set_leaf_with_draft
-      self.update_column :leaf_with_draft, !descendants.no_drafts.exists?
-      self.parent.set_leaf_with_draft unless root?
+      previous_leaf_flag = self.leaf_with_draft
+      self.update_column :leaf_with_draft, !draft && (leaf? || !descendants.no_drafts.exists?)
+      self.parent.set_leaf_with_draft unless root? || (previous_leaf_flag == self.leaf_with_draft)
     end
 
     private
