@@ -134,6 +134,12 @@ describe NoCms::Menus::Menu do
         end
       end
     end
+
+    context "whan searching this leaves with draft" do
+      it "should detect the leaves" do
+        expect(NoCms::Menus::MenuItem.leaves_with_draft).to match_array([root_leaf_menu_item, child_menu_item_1, child_menu_item_2, root_menu_item_3])
+      end
+    end
   end
 
 

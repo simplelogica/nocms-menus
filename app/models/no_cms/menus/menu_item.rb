@@ -17,6 +17,8 @@ module NoCms::Menus
     after_save :set_leaf_with_draft
     after_save :set_default_position
 
+    scope :leaves_with_draft, ->() { where leaf_with_draft: true }
+
     scope :active_for, ->(options = {}) do
       # Now we search the active menu item. First we search for the any active for the current object, then the action and then an static url
       # If there's no param (object, action or url) or an active item for the param then we search the next one
