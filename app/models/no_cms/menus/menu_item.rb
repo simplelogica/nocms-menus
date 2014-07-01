@@ -2,7 +2,9 @@ module NoCms::Menus
   class MenuItem < ActiveRecord::Base
     include Concerns::TranslationScopes
 
-    translates :name, :external_url, :draft
+    translates :name, :external_url, :draft, :leaf_with_draft
+
+    delegate :leaf_with_draft?, to: :translation
 
     acts_as_nested_set
 
@@ -17,7 +19,7 @@ module NoCms::Menus
     after_save :set_leaf_with_draft
     after_save :set_default_position
 
-    scope :leaves_with_draft, ->() { where leaf_with_draft: true }
+    scope :leaves_with_draft, ->() { where_with_locale leaf_with_draft: true }
 
     scope :active_for, ->(options = {}) do
       # Now we search the active menu item. First we search for the any active for the current object, then the action and then an static url
@@ -90,9 +92,13 @@ module NoCms::Menus
     end
 
     def set_leaf_with_draft
-      previous_leaf_flag = self.leaf_with_draft
-      self.update_column :leaf_with_draft, !draft && (leaf? || !descendants.no_drafts.exists?)
-      self.parent.set_leaf_with_draft unless root? || (previous_leaf_flag == self.leaf_with_draft)
+      translations.each do |translation|
+        I18n.with_locale(translation.locale) do
+          previous_leaf_flag = translation.leaf_with_draft
+          translation.update_column :leaf_with_draft, !draft && (leaf? || !descendants.no_drafts.exists?)
+          self.parent.set_leaf_with_draft unless root? || (previous_leaf_flag == self.leaf_with_draft)
+        end
+      end
     end
 
     private
