@@ -52,7 +52,7 @@ module NoCms::Menus::MenuHelper
 
     options[:active_menu_items] ||= active_menu_item_ids menu_item.menu
 
-    conditional_cache_menu menu_item.menu, options.merge(initial_cache_key: "submenu-#{menu_item.id}") do
+    conditional_cache_menu menu_item.menu, options.reverse_merge(initial_cache_key: "submenu-#{menu_item.id}") do
       options[:leaves_menu_items] ||= leaf_menu_item_ids menu_item.menu
       has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
         !options[:leaves_menu_items].include?(menu_item.id) # This menu item is not a leaf
@@ -87,7 +87,7 @@ module NoCms::Menus::MenuHelper
 
     options[:active_menu_items] ||= active_menu_item_ids menu_item.menu
 
-    conditional_cache_menu menu_item.menu, options.merge(initial_cache_key: "children-submenu-#{menu_item.id}") do
+    conditional_cache_menu menu_item.menu, options.reverse_merge(initial_cache_key: "children-submenu-#{menu_item.id}") do
 
       options[:leaves_menu_items] ||= leaf_menu_item_ids menu_item.menu
       has_children = (!options[:depth] || (menu_item.depth < options[:depth]-1)) && # There's no depth option or we are below that depth AND
