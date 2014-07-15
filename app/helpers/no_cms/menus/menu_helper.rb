@@ -63,6 +63,7 @@ module NoCms::Menus::MenuHelper
       item_classes = ['menu_item']
       item_classes << options[:current_class] if options[:active_menu_items].include?(menu_item.id)
       item_classes << options[:with_children_class] if has_children
+      item_classes += menu_item.css_class.split(' ') unless menu_item.css_class.blank?
 
       content_tag(:li, class: item_classes.join(' ')) do
         # If this menu item points to a route in other engine we need that engines route set

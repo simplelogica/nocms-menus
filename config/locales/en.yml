@@ -13,3 +13,4 @@ en:
         draft: draft
         kind: kind
         position: position
+        css_class: CSS class
