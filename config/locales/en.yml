@@ -1,0 +1,15 @@
+en:
+  activerecord:
+    models:
+      no_cms/menus/menu: Menu
+      no_cms/menus/menu_item: Menu Item
+    attributes:
+      no_cms/menus/menu:
+        name: Name
+        uid: Uid
+      no_cms/menus/menu_item:
+        name: Name
+        external_url: External url
+        draft: draft
+        kind: kind
+        position: position
