@@ -13,3 +13,4 @@ es:
         draft: Borrador
         kind: Tipo
         position: Posición
+        css_class: Clase CSS
