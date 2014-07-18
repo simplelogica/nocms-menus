@@ -77,7 +77,8 @@ module NoCms::Menus::MenuHelper
         path = url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
 
         # And finally get the link
-        content = link_to menu_item.name, path
+        turbolinks = {:'data-no-turbolink' => true} unless menu_item.turbolinks
+        content = link_to menu_item.name, path, turbolinks
         content += show_children_submenu(menu_item, options) if has_children
         content
       end
