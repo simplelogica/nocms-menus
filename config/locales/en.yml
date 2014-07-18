@@ -14,3 +14,4 @@ en:
         kind: kind
         position: position
         css_class: CSS class
+        turbolinks: Active turbolinks
