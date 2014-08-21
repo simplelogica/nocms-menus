@@ -5,6 +5,10 @@ NoCms::Menus.configure do |config|
   # e.g: show_menu 'menu_name', depth: 2, menu_class: 'nav', cache: true
   # config.cache_enabled = false
 
+  # When using some gem like 'route_translator' for urls internacionalization we need the locale to be set on the urls
+  # This setting must be enabled (set to true) if you are using i18n routes
+  # config.localize_urls = false
+
   # In this section we configure which options will be available in the menus selector.
   # Menu kinds may contain:
   #   - A class in object_class option. Then the admin would show all the objects of that class.

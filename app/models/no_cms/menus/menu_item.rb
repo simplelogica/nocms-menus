@@ -69,7 +69,8 @@ module NoCms::Menus
         when !menu_kind[:action].nil?
           controller, action = menu_action.split('#')
           # When we are inside an engine we need to prepend '/' to the controller, or else it would search the controller in the current engine
-          { controller: "/#{controller}", action: action }
+          locale = NoCms::Menus.localize_urls ? {locale: I18n.locale.to_s} : {}
+          { controller: "/#{controller}", action: action }.merge locale
         else
           external_url
       end
