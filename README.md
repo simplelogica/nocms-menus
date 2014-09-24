@@ -149,3 +149,74 @@ show_submenu menu_item # => It will show (among other things) -> link_to(menu_it
 If you look carefully you'll see that no main_app has been used to call the polymorphic path. Instead, the news route_set has been used.
 
 `main_app` is only used when no route_set has been configured in the menu kind.
+
+## Menu Cache
+
+### Rails fragment cache
+
+An standard Rails fragment cache is used to store an static version of the menus. You can enable/disable this cache by setting the NoCms::Menus.cache_enabled setting on the initialize.
+
+You can override this setting on every call to the menu helper by sending the `cache: true` option.
+
+## Menu Helpers
+
+Menus and menu items are Rails object, and you can do with them whatever you want (just take into account considerations about route sets, cache and how to show each kind of menu item). If you want to show your menu in your own customized way I would recommend you to take a look to the [Menu Helper file](https://github.com/simplelogica/nocms-menus/blob/master/app/helpers/no_cms/menus/menu_helper.rb).
+
+However, you have some helpers ready to be used that show the menu as a nested list:
+
+* *show_menu*: This helper displays the menu as a nested list (ul). It takes the uid for the menu to be displayed (if there's no menu with that uid it doesn't print anything). It also takes a lot of options that will be explained later.
+
+* *show_submenu*: This helper display a branch of a menu starting from the menu_item passed as parameter. It's used to display a menu item and the whole tree of descendants
+
+* *show_children_submenu*: This helper displays the descendant tree of a menu item without that menu item. Main purpose of this helper is to show a submenu for a section (i.e. I'm in this section, show me the  menu just for this section).
+
+```ruby
+
+show_menu 'missing-menu' # It doesn't show anything as the menu is missing
+
+show_menu 'main'
+# <ul>
+#   <li> A
+#     <ul>
+#       <li>AA</li>
+#       <li>AB</li>
+#     </ul>
+#   </li>
+#   <li> B
+#     <ul>
+#       <li>BA</li>
+#       <li>BB
+#         <ul>
+#           <li>BBA</li>
+#         </ul>
+#       </li>
+#       <li>BC</li>
+#     </ul>
+#   </li>
+# </ul>
+
+show_submenu menu_item_a
+# <li> A
+#   <ul>
+#     <li>AA</li>
+#     <li>AB</li>
+#   </ul>
+# </li>
+
+show_children_submenu menu_item_b
+# <ul>
+#   <li>BA</li>
+#   <li>BB
+#     <ul>
+#       <li>BBA</li>
+#     </ul>
+#   </li>
+#   <li>BC</li>
+# </ul>
+```
+
+The options for the helpers:
+
+* *menu_class*: Class for the menu ul. By default it's 'menu'
+* *initial_cache_key*: Initial
+
