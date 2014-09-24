@@ -218,5 +218,23 @@ show_children_submenu menu_item_b
 The options for the helpers:
 
 * *menu_class*: Class for the menu ul. By default it's 'menu'
-* *initial_cache_key*: Initial
+* *initial_cache_key*: Initial fragment for the menu cache key. This way you can make the menus dependant on something external.
+* *current_class*: Class for the li's of the currently active items
+* *with_children_class*: Class for the li's that have a submenu
+* *active_menu_items*: Menu items will be activated automatically. If for any reason we need to force the activation of certain menu items you can use this option
+* *depth*: The number of levels we want to display (maybe we don't want infinite recursive menus)
+* *submenu_class*: Class for the ul submenus
+* *submenu_id: An id to be assigned to the first submenu displayed.
+
+
+## Where is the admin interface?
+
+`nocms-menus` is a gem with the minimum dependencies and that includes the admin interface.
+
+Main idea is that this gem can be used in a project with a Rails Admin, an Active Admin or a home made admin.
+
+As soon as we started using this gem we started our own admin interface, which is contained in another gem [nocms-admin-menus](https://github.com/simplelogica/nocms-admin-menus) and you can use it.
+
+If your project already has another standard admin interface such as Rails Admin and you manage to embed nocms-menus on it, please, let us know and we will make a note here giving you full credit for the development :)
+
 
