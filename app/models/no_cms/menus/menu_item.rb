@@ -1,6 +1,10 @@
 module NoCms::Menus
   class MenuItem < ActiveRecord::Base
     include NoCms::Menus::Concerns::TranslationScopes
+    extend Enumerize
+
+    enumerize :rel, in: ['', :alternate, :author, :bookmark, :help, :license, :next,
+                         :nofollow, :noreferrer, :prefetch, :prev, :search, :tag]
 
     translates :name, :external_url, :draft, :leaf_with_draft
 

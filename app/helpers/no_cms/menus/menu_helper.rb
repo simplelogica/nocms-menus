@@ -75,9 +75,13 @@ module NoCms::Menus::MenuHelper
         # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
         path = url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
 
+        # Adding link options (turbolink and rel)
+        link_options = {}
+        link_options['data-no-turbolink'] = true unless menu_item.turbolinks
+        link_options[:rel] = menu_item.rel unless menu_item.rel.blank?
+
         # And finally get the link
-        turbolinks = {:'data-no-turbolink' => true} unless menu_item.turbolinks
-        content = link_to menu_item.name, path, turbolinks
+        content = link_to menu_item.name, path, link_options
         content += show_children_submenu(menu_item, options) if has_children
         content
       end
