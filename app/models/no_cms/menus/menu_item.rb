@@ -122,7 +122,9 @@ module NoCms::Menus
     end
 
     def set_draft_by_kind
-      self.update_attribute :draft, true if !draft && menu_kind[:hidden]
+      translations.each do |t|
+        t.update_attribute :draft, true if !t.draft && menu_kind[:hidden]
+      end
     end
 
   end
