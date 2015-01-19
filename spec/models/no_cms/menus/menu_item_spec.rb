@@ -70,11 +70,13 @@ describe NoCms::Menus::Menu do
 
   context "when hiding menu kinds" do
 
+    let(:old_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action, kind: 'pages' }
     let(:hidden_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action, kind: 'pages' }
     let(:menu_action) { 'pages#index' }
 
     before do
       # We configure the menu kind as hidden
+      old_menu_item
       NoCms::Menus.menu_kinds['pages'][:hidden] = true
       hidden_menu_item
     end
@@ -90,6 +92,10 @@ describe NoCms::Menus::Menu do
 
     it "should not believe it's visible" do
       expect(hidden_menu_item).to be_draft
+    end
+
+    it "should not detect old menu items (created before the change in the config) as visible" do
+      expect(old_menu_item).to be_draft
     end
 
   end

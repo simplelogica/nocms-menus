@@ -6,7 +6,7 @@ module NoCms::Menus
     enumerize :rel, in: ['', :alternate, :author, :bookmark, :help, :license, :next,
                          :nofollow, :noreferrer, :prefetch, :prev, :search, :tag]
 
-    translates :name, :external_url, :draft, :draft?, :leaf_with_draft
+    translates :name, :external_url, :draft, :leaf_with_draft
 
     delegate :leaf_with_draft?, to: :translation
 
@@ -105,6 +105,14 @@ module NoCms::Menus
           self.parent.set_leaf_with_draft unless root? || (previous_leaf_flag == self.leaf_with_draft)
         end
       end
+    end
+
+    def draft
+      menu_kind[:hidden] ? true : translation.draft
+    end
+
+    def draft?
+      draft
     end
 
     private
