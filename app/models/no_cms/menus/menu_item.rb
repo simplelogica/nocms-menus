@@ -6,7 +6,7 @@ module NoCms::Menus
     enumerize :rel, in: ['', :alternate, :author, :bookmark, :help, :license, :next,
                          :nofollow, :noreferrer, :prefetch, :prev, :search, :tag]
 
-    translates :name, :external_url, :draft, :leaf_with_draft
+    translates :name, :external_url, :draft, :draft?, :leaf_with_draft
 
     delegate :leaf_with_draft?, to: :translation
 
@@ -22,6 +22,7 @@ module NoCms::Menus
     before_validation :copy_parent_menu
     after_save :set_leaf_with_draft
     after_save :set_default_position
+    after_save :set_draft_by_kind
 
     scope :leaves_with_draft, ->() { where_with_locale leaf_with_draft: true }
 
@@ -110,6 +111,10 @@ module NoCms::Menus
 
     def set_default_position
       self.update_attribute :position, ((menu.menu_items.pluck(:position).compact.max || 0) + 1) if self[:position].blank?
+    end
+
+    def set_draft_by_kind
+      self.update_attribute :draft, true if !draft && menu_kind[:hidden]
     end
 
   end
