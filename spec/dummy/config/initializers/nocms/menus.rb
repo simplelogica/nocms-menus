@@ -44,6 +44,10 @@ NoCms::Menus.configure do |config|
     },
     'fixed_url' => {
       external_url:  true
+    },
+    'wrong_route_menu_item' => {
+      action: 'not#exists',
+      hidden: true
     }
   }
 end

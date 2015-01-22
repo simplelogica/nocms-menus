@@ -50,6 +50,8 @@ module NoCms::Menus::MenuHelper
 
   def show_submenu menu_item, options = {}
 
+    return '' if menu_item.draft?
+
     options[:active_menu_items] ||= active_menu_item_ids menu_item.menu
     options = options.reverse_merge(initial_cache_key: "submenu-#{menu_item.id}")
 

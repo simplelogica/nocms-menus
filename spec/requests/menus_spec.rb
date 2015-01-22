@@ -18,12 +18,13 @@ describe NoCms::Menus do
 
   let(:page_with_no_menu) { create :page }
 
-
   let(:product) { create :product }
   let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product, kind: 'product' }
 
   let(:external_url_menu_item) { create :no_cms_menus_menu_item, menu: menu, external_url: external_url, kind: 'fixed_url' }
   let(:external_url) { 'http://www.google.com' }
+
+  let(:wrong_route_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'not#exists', kind: 'wrong_route_menu_item' }
 
   before do
     parent_menu_item
@@ -72,6 +73,40 @@ describe NoCms::Menus do
       it "should not render its parent as having children" do
         expect(subject).to have_selector ".menu .menu_item a[href='#{parent_page.path}']"
         expect(subject).to_not have_selector ".menu .menu_item.has-children a[href='#{parent_page.path}']"
+      end
+
+    end
+
+    context "when we have a menu item with wrong routes" do
+
+      context "when it's drafted by configuration" do
+
+
+        before do
+          # We configure the menu kind as hidden
+          wrong_route_menu_item
+        end
+
+        it "doesn't throw any exception" do
+          expect{visit pages_path}.to_not raise_error
+        end
+
+      end
+
+      context "when it's drafted by configuration after it was created" do
+
+
+        before do
+          # We configure the menu kind as hidden
+          NoCms::Menus.menu_kinds['wrong_route_menu_item'].delete :hidden
+          wrong_route_menu_item
+          NoCms::Menus.menu_kinds['wrong_route_menu_item'][:hidden] = true
+        end
+
+        it "doesn't throw any exception" do
+          expect{visit pages_path}.to_not raise_error
+        end
+
       end
 
     end
