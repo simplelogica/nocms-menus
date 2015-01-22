@@ -21,8 +21,15 @@ NoCms::Menus.configure do |config|
     'page' => {
       object_class: Page,
     },
+    'products' => {
+      action: 'products#index'
+    },
     'product' => {
       object_class: Product,
+    },
+    'any_product' => {
+      action: 'products#show',
+      hidden: true
     },
     'pages' => {
       action: 'pages#index'

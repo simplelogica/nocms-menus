@@ -18,8 +18,9 @@ describe NoCms::Menus do
 
   let(:page_with_no_menu) { create :page }
 
+
   let(:product) { create :product }
-  let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product, kind: 'product'  }
+  let(:product_menu_item) { create :no_cms_menus_menu_item, menu: menu, menuable: product, kind: 'product' }
 
   let(:external_url_menu_item) { create :no_cms_menus_menu_item, menu: menu, external_url: external_url, kind: 'fixed_url' }
   let(:external_url) { 'http://www.google.com' }
@@ -223,6 +224,41 @@ describe NoCms::Menus do
       end
 
 
+    end
+
+    context "when product has no menu item attached" do
+
+      let(:products_menu_item) { create :no_cms_menus_menu_item, menu: menu, kind: 'products', menu_action: 'products#index' }
+      let(:product_without_menu_item) { create :product }
+
+      before do
+        products_menu_item
+        product_without_menu_item
+      end
+
+      context "and menu has any product item" do
+        let(:any_product_menu_item) { create :no_cms_menus_menu_item, menu: menu, kind: 'any_product', parent: products_menu_item, menu_action: 'products#show'  }
+
+        before do
+          any_product_menu_item
+          visit product_path(product_without_menu_item)
+        end
+
+        it "should mark products item as active" do
+          expect(subject).to have_selector '.menu .menu_item.active', text: products_menu_item.name
+        end
+      end
+
+      context "and menu has no any product item" do
+        before do
+          visit product_path(product_without_menu_item)
+        end
+
+        it "should not mark products item as active" do
+          expect(subject).to_not have_selector '.menu .menu_item.active'
+        end
+
+      end
     end
 
   end
