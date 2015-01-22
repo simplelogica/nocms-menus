@@ -17,8 +17,12 @@ NoCms::Menus.configure do |config|
   # E.g: config.menu_kinds = {
   #   'page' => {
   #     object_class: Page,
-  #     object_name_method: :title # This is used for displaying the name
+  #     object_name_method: :title, # This is used for displaying the name
   #       # of the item in nocms-admin-menus
+  #     hidden: false # This flag marks that items from this kind must be ALWAYS hidden
+  #       # This is useful for some kinds of menu items that do not create a valid url
+  #       # e.g. Those attached to an 'events#show' action, with no actual event,
+  #       # that have to activate its parent.
   #   },
   #   'agenda' => {
   #     action: 'events#index'

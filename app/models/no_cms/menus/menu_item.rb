@@ -22,6 +22,7 @@ module NoCms::Menus
     before_validation :copy_parent_menu
     after_save :set_leaf_with_draft
     after_save :set_default_position
+    after_save :set_draft_by_kind
 
     scope :leaves_with_draft, ->() { where_with_locale leaf_with_draft: true }
 
@@ -106,10 +107,24 @@ module NoCms::Menus
       end
     end
 
+    def draft
+      menu_kind[:hidden] ? true : translation.draft
+    end
+
+    def draft?
+      draft
+    end
+
     private
 
     def set_default_position
       self.update_attribute :position, ((menu.menu_items.pluck(:position).compact.max || 0) + 1) if self[:position].blank?
+    end
+
+    def set_draft_by_kind
+      translations.each do |t|
+        t.update_attribute :draft, true if !t.draft && menu_kind[:hidden]
+      end
     end
 
   end

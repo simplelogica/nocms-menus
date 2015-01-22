@@ -51,7 +51,8 @@ NoCms::Menus.configure do |config|
     },
     'product' => {
       object_class: Product,
-      object_name_method: :name
+      object_name_method: :name,
+      hidden: false
     },
     'products' => {
       action: 'products#index'
@@ -149,6 +150,34 @@ show_submenu menu_item # => It will show (among other things) -> link_to(menu_it
 If you look carefully you'll see that no main_app has been used to call the polymorphic path. Instead, the news route_set has been used.
 
 `main_app` is only used when no route_set has been configured in the menu kind.
+
+### Hidden menu items
+
+Some menu items are not to be shown. As an example, we can imagine a menu `Events` pointing to an action such as `events#index`. If we enter into an event and go the `events#show` action we may want to activate the `Events` menu but, since we are not in `events#index` it won't be activated.
+
+Solution is to create another menu kind `Any Event` that points to `events#show`, but if we create a menu item of this kind and accidentally leave it published then we will try to write the event_path helper, but without any id, which lead to crash.
+
+To prevent this behaviour and having to watch out that our menu items are correctly published we can use the `hidden` flag on the configuration to make that any menu item of that kind is never visible.
+
+In our example:
+
+```ruby
+NoCms::Menus.configure do |config|
+
+  config.menu_kinds = {
+    'events' => {
+      action: 'events#index'
+    },
+    'any_event' => {
+      action: 'events#show',
+      hidden: true
+    }
+  }
+
+end
+```
+
+Default value of this hidden flag will be `false`.
 
 ## Menu Cache
 
