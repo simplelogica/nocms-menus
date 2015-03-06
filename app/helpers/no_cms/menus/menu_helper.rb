@@ -68,22 +68,9 @@ module NoCms::Menus::MenuHelper
       item_classes += menu_item.css_class.split(' ') unless menu_item.css_class.blank?
 
       content_tag(:li, class: item_classes.join(' ')) do
-        # If this menu item points to a route in other engine we need that engines route set
-        menu_item_route_set = menu_item.route_set.nil? ? main_app : send(menu_item.route_set)
-        # Now we get the url_for info and if it's a hash then add the :only_path option
-        url_info =  menu_item.url_for
-        url_info[:only_path] = true if url_info.is_a? Hash
-
-        # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
-        path = url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
-
-        # Adding link options (turbolink and rel)
-        link_options = {}
-        link_options['data-no-turbolink'] = true unless menu_item.turbolinks
-        link_options[:rel] = menu_item.rel unless menu_item.rel.blank?
 
         # And finally get the link
-        content = link_to menu_item.name, path, link_options
+        content = link_to_menu_item menu_item
         content += show_children_submenu(menu_item, options) if has_children
         content
       end
@@ -150,5 +137,25 @@ module NoCms::Menus::MenuHelper
     menu = NoCms::Menus::Menu.find_by(uid: menu) if menu.is_a? String
     return NoCms::Menus::MenuItem.none if menu.nil?
     current_menu_items_in_menu(menu).map{|c| c.self_and_ancestors.where(depth: level-1) }.flatten
+  end
+
+  def menu_item_path menu_item
+    # If this menu item points to a route in other engine we need that engines route set
+    menu_item_route_set = menu_item.route_set.nil? ? main_app : send(menu_item.route_set)
+    # Now we get the url_for info and if it's a hash then add the :only_path option
+    url_info =  menu_item.url_for
+    url_info[:only_path] = true if url_info.is_a? Hash
+
+    # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
+    url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
+  end
+
+  def link_to_menu_item menu_item, link_options={}
+    # Adding link options (turbolink and rel)
+    link_options['data-no-turbolink'] = true unless menu_item.turbolinks
+    link_options[:rel] = menu_item.rel unless menu_item.rel.blank?
+
+    # And finally get the link
+    link_to menu_item.name, menu_item_path(menu_item), link_options
   end
 end
