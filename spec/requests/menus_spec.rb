@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe NoCms::Menus do
 
+  let(:test_engine) { TestEngine::Engine.routes.url_helpers }
+
   let(:menu) { create :no_cms_menus_menu, uid: 'test' }
 
   let(:action_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'pages#index', kind: 'pages' }
