@@ -7,6 +7,7 @@ module NoCms::Menus
                          :nofollow, :noreferrer, :prefetch, :prev, :search, :tag]
 
     translates :name, :external_url, :draft, :leaf_with_draft
+    accepts_nested_attributes_for :translations
 
     delegate :leaf_with_draft?, to: :translation
 

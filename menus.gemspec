@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
 
-  s.add_dependency "rails", '~> 4.0', '>= 4.0.4'
-  s.add_dependency "globalize", '~> 4.0', '>= 4.0.0'
+  s.add_dependency "rails", '~> 4.0', '<= 4.2.3'
+  s.add_dependency "globalize", '>= 4.0.0', '< 5.1'
   s.add_dependency "awesome_nested_set", '~> 3.0.2'
   s.add_dependency "enumerize", '~> 0.8.0'
 

@@ -30,8 +30,13 @@ module NoCms::Menus::MenuHelper
     "-#{options[:active_menu_items].join("_")}" # And which menu items should be selected
   end
 
-  def show_menu uid, options = {}
-    menu = NoCms::Menus::Menu.find_by(uid: uid)
+  def show_menu menu_or_uid, options = {}
+    menu =
+    if menu_or_uid.is_a? NoCms::Menus::Menu
+      menu_or_uid
+    else
+      NoCms::Menus::Menu.find_by(uid: menu_or_uid)
+    end
     return '' if menu.nil?
 
     options[:active_menu_items] ||= active_menu_item_ids menu

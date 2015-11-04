@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141002120049) do
+ActiveRecord::Schema.define(version: 20141002111539) do
 
   create_table "no_cms_menus_menu_item_translations", force: true do |t|
     t.integer  "no_cms_menus_menu_item_id"
@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(version: 20141002120049) do
     t.integer  "menuable_id"
     t.string   "menuable_type"
     t.string   "menu_action"
-    t.integer  "position"
     t.string   "kind"
+    t.integer  "position"
     t.string   "css_class"
     t.boolean  "turbolinks"
     t.string   "rel"

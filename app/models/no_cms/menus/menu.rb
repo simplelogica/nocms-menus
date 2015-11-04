@@ -1,6 +1,7 @@
 module NoCms::Menus
   class Menu < ActiveRecord::Base
     translates :name
+    accepts_nested_attributes_for :translations
 
     has_many :menu_items, dependent: :destroy, inverse_of: :menu, class_name: "::NoCms::Menus::MenuItem"
     accepts_nested_attributes_for :menu_items, allow_destroy: true
