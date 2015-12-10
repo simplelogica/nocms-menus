@@ -1,17 +1,16 @@
 PATH
   remote: .
   specs:
-    nocms-menus (0.0.1)
+    nocms-menus (1.0.0)
       awesome_nested_set (~> 3.0.2)
       enumerize (~> 0.8.0)
       globalize (>= 4.0.0, < 5.1)
-      rails (~> 4.0, <= 4.2.3)
+      rails (~> 4.0, <= 4.2.5)
 
 PATH
   remote: spec/dummy/vendor/test_engine
   specs:
     test_engine (0.0.1)
-      rails (~> 4.0, <= 4.2.3)
 
 GEM
   remote: https://rubygems.org/
