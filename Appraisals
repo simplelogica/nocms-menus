@@ -1,5 +1,5 @@
 appraise "rails-4-0-mysql" do
-  gem "mysql2"
+  gem "mysql2", "~> 0.3.13"
   gem "rails", "4.0.13"
 end
 
