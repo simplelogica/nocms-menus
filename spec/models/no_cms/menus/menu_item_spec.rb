@@ -68,6 +68,16 @@ describe NoCms::Menus::Menu do
 
   end
 
+  context "when creating a menu item" do
+    let(:page_menu_item) { create :no_cms_menus_menu_item_for_page, menuable_id: page.id }
+    let(:page) { create :page }
+
+    it "should recognize the menuable object even without explictly setting the menuable type" do
+      expect(page_menu_item.menuable).to eq page
+    end
+
+  end
+
   context "when hiding menu kinds" do
 
     let(:old_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action, kind: 'pages' }
