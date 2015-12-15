@@ -4,7 +4,7 @@ describe NoCms::Menus::Menu do
 
   it_behaves_like "model with required attributes", :no_cms_menus_menu, [:name]
   it_behaves_like "model with has many relationship", :no_cms_menus_menu_item, :no_cms_menus_menu_item, :children, :parent
-  it_behaves_like "model with has many relationship", :page, :no_cms_menus_menu_item, :menu_items, :menuable
+  it_behaves_like "model with has many relationship", :page, :no_cms_menus_menu_item_for_page, :menu_items, :menuable
 
   context "detecting active menu items" do
 
@@ -12,10 +12,10 @@ describe NoCms::Menus::Menu do
     let(:menu_action) { 'pages#show' }
     let(:external_url_menu_item) { create :no_cms_menus_menu_item, external_url: external_url }
     let(:external_url) { Faker::Internet.domain_name }
-    let(:page_menu_item) { create :no_cms_menus_menu_item, menuable: page }
+    let(:page_menu_item) { create :no_cms_menus_menu_item_for_page, menuable: page }
     let(:page) { create :page }
     let(:other_menu_items) { create_list :no_cms_menus_menu_item, 2 }
-    let(:other_page_menu_item) { create :no_cms_menus_menu_item, menuable: other_page }
+    let(:other_page_menu_item) { create :no_cms_menus_menu_item_for_page, menuable: other_page }
     let(:other_page) { create :page }
 
 
