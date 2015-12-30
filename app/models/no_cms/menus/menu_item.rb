@@ -11,7 +11,7 @@ module NoCms::Menus
 
     delegate :leaf_with_draft?, to: :translation
 
-    acts_as_nested_set
+    acts_as_nested_set scope: :menu
 
     belongs_to :menu, inverse_of: :menu_items, class_name: "::NoCms::Menus::Menu"
     belongs_to :menuable, polymorphic: true
