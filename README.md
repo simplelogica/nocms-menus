@@ -92,6 +92,12 @@ show_submenu menu_item # => It will show (among other things) -> link_to(menu_it
 
 The other option of the menu kind (`object_name_method`) is thought to be used by the admin interface (read about admin interface at the end of this README) and will allow to list all the instances from the attached ActiveRecord model.
 
+##### How are the objects recognized?
+
+By default, a variable named after the controller you are visiting will be searched to determine which menu items should be active. E.g: If you are in the `ProductsController` a `@product` variable will be searched.
+
+You can override this behaviour by setting a `@menu_object` variable. This variable could contain an `Array` or an `ActiveRecord::Collection` and will be later used by the menu helpers to set some menu items as active.
+
 #### Action: Products
 
 Sometimes we need to attach a menu item not to an object, but to a controller and an action. The syntax used for the configuration is the standard one used by Rails in other places `namespace/controller#action`.
