@@ -38,7 +38,43 @@ module NoCms::Menus
 
     end
 
-    scope :active_for_object, ->(object) { where menuable_type: object.class, menuable_id: object.id }
+    # In this scope we should be able to accept a collection of objects, since
+    # some actions may trigger many menu items directly (e.g A product menu item
+    # may want to activate menu items for its product categories that are in
+    # different menus)
+    scope :active_for_object, ->(object_or_objects) do
+      # if our object is an Array or an AR Collection we get the
+      if object_or_objects.is_a?(Array) || object_or_objects.is_a?(ActiveRecord::Relation)
+        menuable_type_column = arel_table[:menuable_type]
+        menuable_id_column = arel_table[:menuable_id]
+
+        # We group the objects by class
+        object_groups = object_or_objects.group_by(&:class)
+
+        object_condition = object_groups.inject(nil) { |previous_condition, object_group|
+          object_group_class, object_group_instances = object_group
+
+          # And the for each class we check the menuable_type and menuable_id columns
+          condition = menuable_type_column.eq(object_group_class.name).and(
+            menuable_id_column.in(object_group_instances.map(&:id))
+          )
+
+          # If there was not a previous condition then this is the right one.
+          # If there was one we make an OR.
+          if previous_condition.nil?
+            condition
+          else
+            previous_condition.or(condition)
+          end
+        }
+
+        where object_condition
+      else
+        #if it's a simple object, then a simple query
+        where menuable_type: object_or_objects.class, menuable_id: object_or_objects.id
+      end
+
+    end
 
     scope :active_for_action, ->(action) { where menu_action: action }
 
@@ -57,8 +93,17 @@ module NoCms::Menus
 
     end
 
-    def active_for_object? object
-      !object.nil?  && (menuable == object)
+    ##
+    # In this method we check that the menuable is equal or is contained in the
+    # object_or_objects parameter.
+    def active_for_object? object_or_objects
+      # If the object is nil then we don't check anything
+      !object_or_objects.nil?  && (
+        (menuable == object_or_objects) || # the param is equal to the menuable OR
+        ( # The param is a collection that includes the menuable
+          (object_or_objects.is_a?(Array) || object_or_objects.is_a?(ActiveRecord::Relation)) &&
+          object_or_objects.include?(menuable))
+      )
     end
 
     def active_for_action? action
