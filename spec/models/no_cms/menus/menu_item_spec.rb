@@ -36,8 +36,12 @@ describe NoCms::Menus::Menu do
 
     context "when attached to multiple objects" do
 
-      it "should detect only those attached to those objects" do
+      it "should detect only those attached to an array of objects" do
         expect(NoCms::Menus::MenuItem.active_for(object: [page, other_page])).to match_array [page_menu_item, other_page_menu_item]
+      end
+
+      it "should detect only those attached to a scope" do
+        expect(NoCms::Menus::MenuItem.active_for(object: Page.all)).to match_array [page_menu_item, other_page_menu_item]
       end
 
       it "should detect the menu item as active" do
