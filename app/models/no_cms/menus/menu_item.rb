@@ -93,8 +93,17 @@ module NoCms::Menus
 
     end
 
-    def active_for_object? object
-      !object.nil?  && (menuable == object)
+    ##
+    # In this method we check that the menuable is equal or is contained in the
+    # object_or_objects parameter.
+    def active_for_object? object_or_objects
+      # If the object is nil then we don't check anything
+      !object_or_objects.nil?  && (
+        (menuable == object_or_objects) || # the param is equal to the menuable OR
+        ( # The param is a collection that includes the menuable
+          (object_or_objects.is_a?(Array) || object_or_objects.is_a?(ActiveRecord::Relation)) &&
+          object_or_objects.include?(menuable))
+      )
     end
 
     def active_for_action? action
