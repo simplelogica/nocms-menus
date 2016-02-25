@@ -25,7 +25,7 @@ module NoCms::Menus::MenuHelper
     options[:timestamp] ||= [menu.updated_at, menu.menu_items.maximum(:updated_at)].max.to_i
     options[:active_menu_items] ||= active_menu_item_ids menu
 
-    "menus/#{options[:initial_cache_key]}-#{menu.uid}-" + # We use the menu uid
+    "menus/#{I18n.locale}/#{options[:initial_cache_key]}-#{menu.uid}-" + # We use the menu uid
     "#{options[:timestamp]}" + # And the last updated date from the last updated item (or the menu itself)
     "-#{options[:active_menu_items].join("_")}" # And which menu items should be selected
   end
