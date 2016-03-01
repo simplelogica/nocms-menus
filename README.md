@@ -273,3 +273,31 @@ As soon as we started using this gem we started our own admin interface, which i
 If your project already has another standard admin interface such as Rails Admin and you manage to embed nocms-menus on it, please, let us know and we will make a note here giving you full credit for the development :)
 
 
+# Development
+
+```
+$ git clone https://github.com/simplelogica/nocms-seo.git
+$ bundle install
+$ rake
+
+```
+
+Then tests should run (and pass, I hope...).
+
+And use appraisal to test multiple rails versions and db's (set your database configuration for each db in the dummy app)
+
+```
+$ appraisal install
+$ appraisal rake db:create RAILS_ENV=test # if needed
+$ appraisal rake db:migrate RAILS_ENV=test # if needed
+$ appraisal rake
+```
+
+
+Now we can run the dummy app console or server:
+
+```
+$ rake db:migrate
+$ cd spec/dummy
+$ rails console
+```
