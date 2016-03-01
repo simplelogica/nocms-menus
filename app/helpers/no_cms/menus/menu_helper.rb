@@ -159,6 +159,7 @@ module NoCms::Menus::MenuHelper
     # Adding link options (turbolink and rel)
     link_options['data-no-turbolink'] = true unless menu_item.turbolinks
     link_options[:rel] = menu_item.rel unless menu_item.rel.blank?
+    link_options[:target] = menu_item.target unless menu_item.target.blank?
 
     # And finally get the link
     link_to menu_item.name, menu_item_path(menu_item), link_options
