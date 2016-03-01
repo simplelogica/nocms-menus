@@ -124,7 +124,7 @@ module NoCms::Menus
           locale = NoCms::Menus.localize_urls ? {locale: I18n.locale.to_s} : {}
           { controller: "/#{controller}", action: action }.merge locale
         else
-          external_url
+          external_url || '#' # Anchor string for url_for if there isn't any other destination 
       end
     end
 
