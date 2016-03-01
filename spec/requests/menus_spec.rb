@@ -28,6 +28,9 @@ describe NoCms::Menus do
 
   let(:wrong_route_menu_item) { create :no_cms_menus_menu_item, menu: menu, menu_action: 'not#exists', kind: 'wrong_route_menu_item' }
 
+  let(:new_window_menu_item) { create :no_cms_menus_menu_item, menu: menu, target: new_window_target }
+  let(:new_window_target) { '_blank' }
+
   before do
     parent_menu_item
     child_page_menu_item
@@ -36,6 +39,7 @@ describe NoCms::Menus do
     engine_child_action_menu_item
     product_menu_item
     external_url_menu_item
+    new_window_menu_item
   end
 
   subject { page }
@@ -63,6 +67,10 @@ describe NoCms::Menus do
 
     it "should render link to an external url" do
       expect(subject).to have_selector ".menu .menu_item a[href='#{external_url}']"
+    end
+
+    it "should render link to an external url" do
+      expect(subject).to have_selector ".menu .menu_item a[target='#{new_window_target}']"
     end
 
     context "when drafting some menu item" do
