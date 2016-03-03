@@ -1,4 +1,4 @@
-# NoCMS Pages
+# NoCMS Menus
 
 ## What's this?
 
