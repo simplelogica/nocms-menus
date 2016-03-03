@@ -13,7 +13,7 @@ module NoCms::Menus
 
     acts_as_nested_set scope: :menu
 
-    belongs_to :menu, inverse_of: :menu_items, class_name: "::NoCms::Menus::Menu"
+    belongs_to :menu, inverse_of: :menu_items, class_name: "::NoCms::Menus::Menu", touch: true
     belongs_to :menuable, polymorphic: true
 
     accepts_nested_attributes_for :children, allow_destroy: true
@@ -124,7 +124,7 @@ module NoCms::Menus
           locale = NoCms::Menus.localize_urls ? {locale: I18n.locale.to_s} : {}
           { controller: "/#{controller}", action: action }.merge locale
         else
-          external_url || '#' # Anchor string for url_for if there isn't any other destination 
+          external_url || '#' # Anchor string for url_for if there isn't any other destination
       end
     end
 
