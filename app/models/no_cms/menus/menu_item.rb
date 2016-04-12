@@ -155,7 +155,12 @@ module NoCms::Menus
     end
 
     def draft
-      menu_kind[:hidden] ? true : translation.draft
+      # Avoid crash when no menu kind is set
+      if menu_kind.blank?
+        translation.draft
+      else
+        menu_kind[:hidden] ? true : translation.draft
+      end
     end
 
     def draft?
