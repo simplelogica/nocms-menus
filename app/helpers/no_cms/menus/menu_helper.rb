@@ -151,8 +151,16 @@ module NoCms::Menus::MenuHelper
     url_info =  menu_item.url_for
     url_info[:only_path] = true if url_info.is_a? Hash
 
+    # If menu item has a "forced" protocol, we generate full url with base url and given protocol
+    if menu_item.protocol.blank?
+      url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
+    else
+      url_info.is_a?(ActiveRecord::Base) ?
+      force_protocol(request.base_url, menu_item.protocol) + menu_item_route_set.polymorphic_path(url_info) : force_protocol(request.base_url, menu_item.protocol) + url_info
+    end
+
     # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
-    url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
+
   end
 
   def link_to_menu_item menu_item, link_options={}
@@ -162,5 +170,17 @@ module NoCms::Menus::MenuHelper
 
     # And finally get the link
     link_to menu_item.name, menu_item_path(menu_item), link_options
+  end
+
+  # Forces a protocol for a given url
+  def force_protocol url, protocol
+    forced_url = url
+    splitted_url = url.split('//')
+    unless splitted_url.count < 2
+      splitted_url[0] = protocol + ':'
+      forced_url = splitted_url.join('//')
+    end
+
+    forced_url
   end
 end
