@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nocms-menus (0.0.2)
+    nocms-menus (1.0.1)
       awesome_nested_set (= 3.0.0.rc.6)
       enumerize (~> 0.8.0)
       globalize (>= 4.0.0, < 5.1)
