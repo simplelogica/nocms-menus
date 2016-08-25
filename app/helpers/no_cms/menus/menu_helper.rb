@@ -155,7 +155,8 @@ module NoCms::Menus::MenuHelper
     if menu_item.protocol.blank?
       url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) :  menu_item_route_set.url_for(url_info)
     else
-      url_info.is_a?(ActiveRecord::Base) ? menu_item_route_set.polymorphic_path(url_info) : force_protocol(request.base_url, menu_item.protocol) + url_info
+      url_info.is_a?(ActiveRecord::Base) ?
+      force_protocol(request.base_url, menu_item.protocol) + menu_item_route_set.polymorphic_path(url_info) : force_protocol(request.base_url, menu_item.protocol) + url_info
     end
 
     # When url_info is an ActiveRecord object we have to use polymorphic_path instead of url_for
