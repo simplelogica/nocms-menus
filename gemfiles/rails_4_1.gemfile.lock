@@ -1,17 +1,17 @@
 PATH
   remote: ../
   specs:
-    nocms-menus (0.0.1)
-      awesome_nested_set (~> 3.0.2)
-      enumerize (~> 0.8.0)
+    nocms-menus (1.0.1)
+      awesome_nested_set (~> 3.0.0)
+      enumerize (~> 1.1.0)
       globalize (>= 4.0.0, < 5.1)
-      rails (~> 4.0, <= 4.2.3)
+      rails (~> 4.0)
 
 PATH
   remote: ../spec/dummy/vendor/test_engine
   specs:
     test_engine (0.0.1)
-      rails (~> 4.0, <= 4.2.3)
+      rails (~> 4.0, <= 4.3)
 
 GEM
   remote: https://rubygems.org/
@@ -47,7 +47,7 @@ GEM
       rake
       thor (>= 0.14.0)
     arel (5.0.1.20140414130214)
-    awesome_nested_set (3.0.2)
+    awesome_nested_set (3.0.3)
       activerecord (>= 4.0.0, < 5)
     builder (3.2.2)
     capybara (2.5.0)
@@ -57,7 +57,7 @@ GEM
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
     diff-lcs (1.2.5)
-    enumerize (0.8.0)
+    enumerize (1.1.1)
       activesupport (>= 3.2)
     erubis (2.7.0)
     factory_girl (4.5.0)
@@ -138,3 +138,6 @@ DEPENDENCIES
   rspec-rails (~> 3.0.0.beta)
   sqlite3
   test_engine!
+
+BUNDLED WITH
+   1.12.4
