@@ -5,7 +5,7 @@ PATH
       awesome_nested_set (~> 3.0.2)
       enumerize (~> 1.1.0)
       globalize (>= 4.0.0, < 5.1)
-      rails (~> 4.0, <= 4.2.5)
+      rails (~> 4.0, <= 4.3)
 
 PATH
   remote: ../spec/dummy/vendor/test_engine
@@ -146,4 +146,4 @@ DEPENDENCIES
   test_engine!
 
 BUNDLED WITH
-   1.11.2
+   1.12.4

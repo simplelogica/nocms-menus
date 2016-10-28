@@ -10,7 +10,7 @@ end
 
 appraise "rails-4-2-mysql" do
   gem "mysql2"
-  gem "rails", "4.2.5"
+  gem "rails", "4.2.7.1"
 end
 
 appraise "rails-4-0-pgsql" do
@@ -25,5 +25,5 @@ end
 
 appraise "rails-4-2-pgsql" do
   gem "pg"
-  gem "rails", "4.2.5"
+  gem "rails", "4.2.7.1"
 end
