@@ -3,7 +3,11 @@
 source "https://rubygems.org"
 
 gem "pg"
-gem "rails", "4.2.7.1"
+gem "rails", "5.0.0.1"
+gem "globalize", :git => "git@github.com:globalize/globalize.git", :branch => "master"
+gem "activeresource", :github => "rails/activeresource"
+gem "activesupport", "~> 5.0.0.1"
+gem "awesome_nested_set", "~> 3.1.1"
 
 group :development, :test do
   gem "faker"
