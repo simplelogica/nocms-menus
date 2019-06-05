@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    nocms-menus (1.0.0)
+    nocms-menus (1.0.1)
       awesome_nested_set (>= 3.0.2, < 3.2)
       enumerize (> 1.0, < 2.1)
       globalize (>= 4.0.0, < 5.2)
@@ -47,8 +47,8 @@ GEM
       rake
       thor (>= 0.14.0)
     arel (5.0.1.20140414130214)
-    awesome_nested_set (3.1.1)
-      activerecord (>= 4.0.0, < 5.1)
+    awesome_nested_set (3.1.4)
+      activerecord (>= 4.0.0, < 5.3)
     builder (3.2.2)
     capybara (2.6.2)
       addressable
@@ -146,4 +146,4 @@ DEPENDENCIES
   test_engine!
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
