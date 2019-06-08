@@ -3,7 +3,9 @@
 source "https://rubygems.org"
 
 gem "mysql2"
-gem "rails", "4.2.7.1"
+gem "rails", "4.2.11.1"
+gem "globalize", "~> 5.1.0"
+gem "rspec-rails", "~> 3.5.0.beta"
 
 group :development, :test do
   gem "faker"
@@ -11,7 +13,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "rspec-rails"
   gem "factory_girl"
   gem "capybara"
   gem "appraisal"

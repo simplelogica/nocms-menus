@@ -2,10 +2,9 @@
 
 source "https://rubygems.org"
 
-gem "mysql2", "~> 0.3.10"
-gem "rails", "4.0.13"
-gem "enumerize", "1.1.1"
-gem "rspec-rails", "3.5.0"
+gem "pg"
+gem "rails", "5.2.3"
+gem "rspec-rails"
 
 group :development, :test do
   gem "faker"
