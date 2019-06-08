@@ -66,6 +66,9 @@ appraise "rails-4-2-pgsql" do
   gemspec
   gem "pg", '~> 0.21.0'
   gem "rails", "4.2.11.1"
+  # Restricted globalize version due to some bug with the name attribute of the
+  # menu item
+  gem "globalize", "~> 5.1.0"
   gem 'rspec-rails', '~> 3.5.0.beta'
 end
 
