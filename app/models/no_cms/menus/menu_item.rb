@@ -71,7 +71,7 @@ module NoCms::Menus
         where object_condition
       else
         #if it's a simple object, then a simple query
-        where menuable_type: object_or_objects.class, menuable_id: object_or_objects.id
+        where menuable_type: object_or_objects.class.to_s, menuable_id: object_or_objects.id
       end
 
     end
