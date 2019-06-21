@@ -48,7 +48,9 @@ module NoCms::Menus::MenuHelper
       options[:leaves_menu_items] ||= leaf_menu_item_ids menu
 
       content_tag(:ul, class: options[:menu_class]) do
-        raw menu.menu_items.roots.no_drafts.reorder(position: :asc).map{|r| show_submenu r, options }.join
+        # Delete includes(:transtations) for globalize.
+        # Not valid include(:translations) for version globalize > 4.0.3
+        raw menu.menu_items.roots.no_drafts.includes(:transtations).reorder(position: :asc).map{|r| show_submenu r, options }.join
       end.to_s
     end
 
