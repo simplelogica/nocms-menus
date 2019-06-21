@@ -3,9 +3,9 @@
 source "https://rubygems.org"
 
 gem "pg"
-gem "rails", "5.0.1"
+gem "rails", "5.2.3"
 gem "activeresource", :github => "rails/activeresource"
-gem "activesupport", "~> 5.0.0"
+gem "activesupport", "~> 5.2.3"
 gem "awesome_nested_set", "~> 3.1.1"
 gem "globalize", "~> 5.2.0"
 
