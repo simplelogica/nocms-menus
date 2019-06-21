@@ -48,7 +48,7 @@ module NoCms::Menus::MenuHelper
       options[:leaves_menu_items] ||= leaf_menu_item_ids menu
 
       content_tag(:ul, class: options[:menu_class]) do
-        raw menu.menu_items.roots.no_drafts.includes(:translations).reorder(position: :asc).map{|r| show_submenu r, options }.join
+        raw menu.menu_items.roots.no_drafts.reorder(position: :asc).map{|r| show_submenu r, options }.join
       end.to_s
     end
 
@@ -106,7 +106,7 @@ module NoCms::Menus::MenuHelper
       end
 
       content_tag(:ul, id: submenu_id, class: submenu_class) do
-        raw menu_item.children.no_drafts.includes(:translations).reorder(position: :asc).map{|c| show_submenu c, options }.join
+        raw menu_item.children.no_drafts.reorder(position: :asc).map{|c| show_submenu c, options }.join
       end if has_children
     end
   end
