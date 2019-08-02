@@ -12,6 +12,7 @@ gem "awesome_nested_set", "~> 3.1.1"
 group :development, :test do
   gem "faker"
   gem "test_engine", :path => "../spec/dummy/vendor/test_engine"
+  gem "pry"
 end
 
 group :test do
