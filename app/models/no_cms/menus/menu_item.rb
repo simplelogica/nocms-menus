@@ -22,6 +22,7 @@ module NoCms::Menus
 
     before_validation :copy_parent_menu
     before_save :set_menuable_type
+    before_save :set_menu_action
     after_save :set_leaf_with_draft
     after_save :set_default_position
     after_save :set_draft_by_kind
@@ -182,6 +183,10 @@ module NoCms::Menus
 
     private def set_menuable_type
       self.menuable_type = menu_kind[:object_class].to_s
+    end
+
+    private def set_menu_action
+      self.menu_action = menu_kind[:action]
     end
 
   end
