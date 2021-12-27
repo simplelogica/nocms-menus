@@ -4,14 +4,13 @@ source "https://rubygems.org"
 
 gem "pg"
 gem "rails", "5.2.3"
-gem "activeresource", :github => "rails/activeresource"
+gem "activeresource", github: "rails/activeresource"
 gem "activesupport", "~> 5.2.3"
 gem "awesome_nested_set", "~> 3.1.1"
-gem "globalize", "~> 5.2.0"
 
 group :development, :test do
   gem "faker"
-  gem "test_engine", :path => "../spec/dummy/vendor/test_engine"
+  gem "test_engine", path: "../spec/dummy/vendor/test_engine"
   gem "pry"
 end
 
@@ -22,4 +21,4 @@ group :test do
   gem "appraisal"
 end
 
-gemspec :path => "../"
+gemspec path: "../"
