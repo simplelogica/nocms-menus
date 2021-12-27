@@ -175,7 +175,13 @@ describe NoCms::Menus::Menu do
       end
 
       context "when the other child is also drafted" do
-        before { child_menu_item_2.update_attributes draft: true }
+        before do
+          if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+            child_menu_item_2.update draft: true
+          else
+            child_menu_item_2.update_attributes draft: true
+          end
+        end
         it "should be a leaf" do
           expect(root_menu_item_2.reload).to be_leaf_with_draft
         end
@@ -188,7 +194,13 @@ describe NoCms::Menus::Menu do
       end
 
       context "when the children are undrafted" do
-        before { only_draft_child_menu_item_3.update_attributes draft: false }
+        before do
+          if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+            only_draft_child_menu_item_3.update draft: false
+          else
+            only_draft_child_menu_item_3.update_attributes draft: false
+          end
+        end
         it "should not be a leaf" do
           expect(root_menu_item_3.reload).to_not be_leaf_with_draft
         end

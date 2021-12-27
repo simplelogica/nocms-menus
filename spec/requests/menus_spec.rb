@@ -76,7 +76,11 @@ describe NoCms::Menus do
     context "when drafting some menu item" do
 
       before do
-        child_page_menu_item.update_attributes draft: true;
+        if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+          child_page_menu_item.update draft: true;
+        else
+          child_page_menu_item.update_attributes draft: true;
+        end
         visit pages_path
       end
 
