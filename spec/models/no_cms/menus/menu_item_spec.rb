@@ -8,8 +8,9 @@ describe NoCms::Menus::Menu do
 
   context "detecting active menu items" do
 
-    let(:action_menu_item) { create :no_cms_menus_menu_item, menu_action: menu_action }
-    let(:menu_action) { 'pages#show' }
+    let(:action_menu_item) { create :no_cms_menus_menu_item, kind: menu_kind }
+    let(:menu_kind) { 'pages-show' }
+    let(:menu_action) { NoCms::Menus.menu_kinds[menu_kind][:action] }
     let(:external_url_menu_item) { create :no_cms_menus_menu_item, external_url: external_url }
     let(:external_url) { Faker::Internet.domain_name }
     let(:page_menu_item) { create :no_cms_menus_menu_item_for_page, menuable: page }

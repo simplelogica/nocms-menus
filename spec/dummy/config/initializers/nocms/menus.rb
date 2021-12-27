@@ -34,6 +34,9 @@ NoCms::Menus.configure do |config|
     'pages' => {
       action: 'pages#index'
     },
+    'pages-show' => {
+      action: 'pages#show'
+    },
     'tests' => {
       route_set: 'test_engine',
       action: 'test_engine/tests#index'
