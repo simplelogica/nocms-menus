@@ -35,6 +35,29 @@ appraise "rails-5-0-mysql" do
   gem "awesome_nested_set", '~> 3.1.1'
 end
 
+appraise "rails-5-1-mysql" do
+  gemspec
+  gem "mysql2"
+  gem 'rails', '5.1.7'
+  gem 'rspec-rails'
+  if ruby_version < ruby_2_4_6
+    gem 'globalize', '~> 5.2.0'
+  end
+end
+
+appraise "rails-5-2-mysql" do
+  gemspec
+  gem "mysql2"
+  gem 'rails', '5.2.6'
+  gem 'rspec-rails'
+  # Rails 5.2.4 incldus a bug with previous gem versions
+  # More info: https://github.com/collectiveidea/awesome_nested_set/issues/412
+  gem "awesome_nested_set", '~> 3.2.0'
+  if ruby_version < ruby_2_4_6
+    gem 'globalize', '~> 5.2.0'
+  end
+end
+
 if ruby_version > ruby_2_4_4
   appraise "rails-6-1-mysql" do
     gemspec
@@ -65,19 +88,29 @@ end
 
 appraise "rails-5-0-pgsql" do
   gem "pg"
-  gem "rails", "5.0.7.1"
+  gem "rails", "5.0.7.2"
   gem "awesome_nested_set", '~> 3.1.1'
   if ruby_version < ruby_2_4_6
     gem 'globalize', '~> 5.2.0'
   end
 end
 
-appraise "rails-5-2-3-pgsql" do
+appraise "rails-5-1-pgsql" do
+  gemspec
   gem "pg"
-  gem "rails", "5.2.3"
-  gem 'activeresource', github: 'rails/activeresource'
-  gem "activesupport", "~> 5.2.3"
-  gem "awesome_nested_set", '~> 3.1.1'
+  gem 'rails', '5.1.7'
+  gem 'rspec-rails'
+  if ruby_version < ruby_2_4_6
+    gem 'globalize', '~> 5.2.0'
+  end
+end
+
+appraise "rails-5-2-pgsql" do
+  gem "pg"
+  gem "rails", "5.2.6"
+  # Rails 5.2.4 incldus a bug with previous gem versions
+  # More info: https://github.com/collectiveidea/awesome_nested_set/issues/412
+  gem "awesome_nested_set", '~> 3.2.0'
 
   if ruby_version < ruby_2_4_6
     gem 'globalize', '~> 5.2.0'
