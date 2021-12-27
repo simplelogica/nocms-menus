@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229174619) do
+ActiveRecord::Schema.define(version: 20160822160108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +24,9 @@ ActiveRecord::Schema.define(version: 20160229174619) do
     t.string   "external_url",              limit: 255
     t.boolean  "draft",                                 default: false
     t.boolean  "leaf_with_draft",                       default: false
+    t.index ["leaf_with_draft"], name: "index_no_cms_menus_menu_item_translations_on_leaf_with_draft", using: :btree
+    t.index ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations", using: :btree
   end
-
-  add_index "no_cms_menus_menu_item_translations", ["leaf_with_draft"], name: "index_no_cms_menus_menu_item_translations_on_leaf_with_draft", using: :btree
-  add_index "no_cms_menus_menu_item_translations", ["no_cms_menus_menu_item_id"], name: "no_cms_menu_item_on_translations", using: :btree
 
   create_table "no_cms_menus_menu_items", force: :cascade do |t|
     t.integer  "menu_id"
@@ -47,10 +45,10 @@ ActiveRecord::Schema.define(version: 20160229174619) do
     t.boolean  "turbolinks"
     t.string   "rel",           limit: 255
     t.string   "target",        limit: 255
+    t.string   "protocol",      limit: 255
+    t.index ["menu_id"], name: "index_no_cms_menus_menu_items_on_menu_id", using: :btree
+    t.index ["menuable_id", "menuable_type"], name: "index_no_cms_menus_menu_items_on_menuable_id_and_menuable_type", using: :btree
   end
-
-  add_index "no_cms_menus_menu_items", ["menu_id"], name: "index_no_cms_menus_menu_items_on_menu_id", using: :btree
-  add_index "no_cms_menus_menu_items", ["menuable_id", "menuable_type"], name: "index_no_cms_menus_menu_items_on_menuable_id_and_menuable_type", using: :btree
 
   create_table "no_cms_menus_menu_translations", force: :cascade do |t|
     t.integer  "no_cms_menus_menu_id"
@@ -58,9 +56,8 @@ ActiveRecord::Schema.define(version: 20160229174619) do
     t.string   "name",                 limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["no_cms_menus_menu_id"], name: "index_no_cms_menus_menu_translations_on_no_cms_menus_menu_id", using: :btree
   end
-
-  add_index "no_cms_menus_menu_translations", ["no_cms_menus_menu_id"], name: "index_no_cms_menus_menu_translations_on_no_cms_menus_menu_id", using: :btree
 
   create_table "no_cms_menus_menus", force: :cascade do |t|
     t.string   "uid",        limit: 255

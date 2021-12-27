@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency "awesome_nested_set", '>= 3.0.2', '< 3.4'
   s.add_dependency "enumerize", '> 1.0', '< 2.1'
 
-  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "sqlite3", '>= 1.3.13'
 end

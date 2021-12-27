@@ -1,8 +1,15 @@
-class CreateNoCmsMenusMenus < ActiveRecord::Migration
+active_record_migration_class =
+  if Rails::VERSION::MAJOR >= 5
+    ActiveRecord::Migration[Rails::VERSION::MAJOR.to_f]
+  else
+    ActiveRecord::Migration
+  end
+
+class CreateNoCmsMenusMenus < active_record_migration_class
   def change
     create_table :no_cms_menus_menus do |t|
       t.string :uid
-      t.timestamps
+      t.timestamps null: false
     end
 
     create_table :no_cms_menus_menu_translations do |t|
@@ -10,7 +17,7 @@ class CreateNoCmsMenusMenus < ActiveRecord::Migration
       t.string :locale
 
       t.string :name
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

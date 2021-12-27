@@ -27,16 +27,20 @@ module NoCms::Menus
     after_save :set_default_position
     after_save :set_draft_by_kind
 
-    scope :leaves_with_draft, ->() { where_with_locale leaf_with_draft: true }
+    scope :active_for,        -> (options = {}) do
+      # Now we search the active menu item.
+      # First we search for the any active for the current object,
+      # then the action and then an static url
+      collection = []
 
-    scope :active_for, ->(options = {}) do
-      # Now we search the active menu item. First we search for the any active for the current object, then the action and then an static url
-      # If there's no param (object, action or url) or an active item for the param then we search the next one
-      return active_for_object(options[:object]) unless options[:object].nil? || !active_for_object(options[:object]).exists?
-      return active_for_action(options[:action]) unless options[:action].nil? || !active_for_action(options[:action]).exists?
-      return active_for_external_url(options[:url]) unless options[:url].nil?
-      return none
+      collection = active_for_object(options[:object]) if options[:object]
+      return collection unless collection.length.zero?
 
+      collection = active_for_action(options[:action]) if options[:action]
+      return collection unless collection.length.zero?
+
+      collection = active_for_external_url(options[:url]) if options[:url]
+      return collection
     end
 
     # In this scope we should be able to accept a collection of objects, since
@@ -72,26 +76,23 @@ module NoCms::Menus
         where object_condition
       else
         #if it's a simple object, then a simple query
-        where menuable_type: object_or_objects.class, menuable_id: object_or_objects.id
+        where menuable_type: object_or_objects.class.name, menuable_id: object_or_objects.try(:id)
       end
 
     end
 
-    scope :active_for_action, ->(action) { where menu_action: action }
-
-    scope :active_for_external_url, ->(external_url) { where external_url: external_url }
-
-    scope :drafts, ->() { where_with_locale(draft: true) }
-    scope :no_drafts, ->() { where_with_locale(draft: false) }
+    scope :leaves_with_draft,       -> { where_with_locale leaf_with_draft: true }
+    scope :active_for_action,       -> (action) { where menu_action: action }
+    scope :active_for_external_url, -> (external_url) { where external_url: external_url }
+    scope :drafts,                  -> { where_with_locale(draft: true) }
+    scope :no_drafts,               -> { where_with_locale(draft: false) }
 
     def active_for?(options = {})
-
       return active_for_object?(options[:object]) unless options[:object].nil?
       return active_for_action?(options[:action]) unless options[:action].nil?
       return active_for_external_url?(options[:url]) unless options[:url].nil?
 
       false
-
     end
 
     ##
