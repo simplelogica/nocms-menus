@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     nocms-menus (2.0.0)
-      awesome_nested_set (>= 3.0.2, < 3.4)
+      awesome_nested_set (>= 3.0.2, < 3.5)
       enumerize (> 1.0, < 2.1)
       globalize (~> 6.0.1)
       rails (>= 4.0.0, < 7.0)
